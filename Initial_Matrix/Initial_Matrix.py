@@ -1,12 +1,22 @@
 import numpy as np
 import pandas as pd
-import yfinance as yf
+import os
 
 # -------------------
-# 1) Download JPM data
+# 1) Load JPM %Return data from CSV
 # -------------------
-data = yf.download("JPM", start="2010-01-01", progress=False, auto_adjust=False)
-returns = np.ravel(data["Close"].pct_change().mul(100).dropna().to_numpy())
+
+base_dir = os.path.dirname(os.path.abspath(__file__))
+data_path = os.path.join(base_dir, "..", "data", "PriceHistoryJPM.csv")
+
+df = pd.read_csv(data_path)
+
+# Identify %Return column
+possible_return_cols = [col for col in df.columns if "%return" in col.lower() or "return" in col.lower()]
+if not possible_return_cols:
+    raise ValueError("No '%Return' column found in PriceHistoryJPM.csv. Please ensure it exists.")
+return_col = possible_return_cols[0]
+returns = df[return_col].dropna().to_numpy(dtype=float)
 
 # -------------------
 # 2) Define basket edges
@@ -32,9 +42,8 @@ neg_large = np.arange(-10.0, -5.0, 1.0).tolist()
 pos_large = np.arange(5.0, 10.01, 1.0).tolist()
 edges = sorted(set(edges + neg_large + pos_large))
 
-# --- Tails: below -10 and above 10 ---
+# --- Tails ---
 edges = [-np.inf] + edges + [np.inf]
-
 edges = np.array(sorted(edges))
 n_bins = len(edges) - 1
 
@@ -60,16 +69,33 @@ row_sums[row_sums == 0] = 1
 transition_probs = transition_counts / row_sums
 
 # -------------------
-# 6) Save outputs
+# 6) Create human-readable bin labels
 # -------------------
-pd.DataFrame({"Percent Change (%)": returns}).to_csv("jpm_percent_change.csv", index_label="Index")
+bin_labels = []
+for i in range(n_bins):
+    low, high = edges[i], edges[i + 1]
+    if np.isinf(low):
+        label = f"< {high:.2f}%"
+    elif np.isinf(high):
+        label = f"> {low:.2f}%"
+    else:
+        label = f"[{low:.2f}%, {high:.2f}%)"
+    bin_labels.append(label)
+
+# -------------------
+# 7) Save outputs
+# -------------------
+pd.DataFrame({"Percent Change (%)": returns}).to_csv(
+    os.path.join(base_dir, "jpm_percent_change.csv"), index_label="Index"
+)
+
 pd.DataFrame(
     transition_probs,
-    columns=[f"To_{i}" for i in range(n_bins)],
-    index=[f"From_{i}" for i in range(n_bins)]
-).to_csv("jpm_transition_matrix.csv")
+    columns=bin_labels,
+    index=bin_labels
+).to_csv(os.path.join(base_dir, "jpm_transition_matrix.csv"))
 
 print(f"✅ Transition matrix complete with {n_bins} bins.")
 print("Files saved as:")
-print("  jpm_percent_change.csv")
-print("  jpm_transition_matrix.csv")
+print(f"  {os.path.join(base_dir, 'jpm_percent_change.csv')}")
+print(f"  {os.path.join(base_dir, 'jpm_transition_matrix.csv')}")
