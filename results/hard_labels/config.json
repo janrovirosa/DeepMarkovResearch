@@ -1,0 +1,9 @@
+{
+  "experiment_name": "hard_labels",
+  "timestamp": "2026-02-13 08:48:15",
+  "use_soft_labels": false,
+  "soft_label_kernel": "gaussian",
+  "soft_label_sigma": 1.0,
+  "soft_label_radius": 3,
+  "soft_label_eps": 1e-08
+}

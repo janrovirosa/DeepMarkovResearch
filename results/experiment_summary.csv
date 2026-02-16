@@ -1,0 +1,4 @@
+Experiment,Soft Labels,Kernel,Sigma/Radius,Trans Test Loss,Trans Test Acc,Trans Test Severity,Base Test Loss,Base Test Acc,Base Test Severity
+hard_labels,False,gaussian,1.0,4.7084,3.09%,8.350010871887207,4.1898,2.53%,8.297914505004883
+soft_gaussian_sigma1.0,True,gaussian,1.0,2.4166,4.21%,8.245039939880371,2.4225,4.78%,8.214766502380371
+soft_gaussian_sigma2.0,True,gaussian,2.0,1.7351,3.93%,8.248446464538574,1.7230,3.65%,8.198734283447266
