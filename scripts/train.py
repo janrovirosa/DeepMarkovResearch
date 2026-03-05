@@ -106,8 +106,16 @@ def train_one_run(
     patience: int = 10,
     grad_clip: float = 1.0,
     verbose: bool = False,
+    log_nll: bool = False,
 ) -> Tuple[Dict, Dict]:
     """Train model with AdamW, ReduceLROnPlateau, early stopping.
+
+    Parameters
+    ----------
+    log_nll : bool
+        If True, also compute per-epoch cross-entropy NLL on train and val sets
+        and store in history["train_nll"] and history["val_nll"]. This doubles
+        evaluation time per epoch but is needed for generalization gap analysis.
 
     Returns (best_state_dict, history_dict).
     """
@@ -118,7 +126,10 @@ def train_one_run(
     best_val_loss = float("inf")
     best_state = None
     epochs_no_improve = 0
-    history = {"train_loss": [], "val_loss": [], "train_acc": [], "val_acc": []}
+    history: Dict[str, list] = {"train_loss": [], "val_loss": [], "train_acc": [], "val_acc": []}
+    if log_nll:
+        history["train_nll"] = []
+        history["val_nll"] = []
 
     for epoch in range(1, max_epochs + 1):
         # ── Train ──
@@ -158,6 +169,27 @@ def train_one_run(
         history["val_loss"].append(avg_v)
         history["train_acc"].append(t_correct / t_n)
         history["val_acc"].append(v_correct / v_n)
+
+        if log_nll:
+            # Extra pass to compute cross-entropy NLL (not KL with soft labels)
+            model.eval()
+            tr_nll, tr_n2 = 0.0, 0
+            va_nll, va_n2 = 0.0, 0
+            with torch.no_grad():
+                for F_b, xt_b, y_b in train_loader:
+                    F_b, xt_b, y_b = F_b.to(device), xt_b.to(device), y_b.to(device)
+                    logits = model(F_b, xt_b)
+                    nll = F.cross_entropy(logits, y_b, reduction="sum")
+                    tr_nll += nll.item()
+                    tr_n2 += len(y_b)
+                for F_b, xt_b, y_b in val_loader:
+                    F_b, xt_b, y_b = F_b.to(device), xt_b.to(device), y_b.to(device)
+                    logits = model(F_b, xt_b)
+                    nll = F.cross_entropy(logits, y_b, reduction="sum")
+                    va_nll += nll.item()
+                    va_n2 += len(y_b)
+            history["train_nll"].append(tr_nll / tr_n2)
+            history["val_nll"].append(va_nll / va_n2)
 
         if avg_v < best_val_loss:
             best_val_loss = avg_v

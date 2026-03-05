@@ -1,0 +1,29 @@
+{
+  "horizon": 10,
+  "N_bins": 55,
+  "N_actual": 55,
+  "N_XT": 55,
+  "n_features_base": 30,
+  "label_definition": "Y_t^h = bin((prices[t+1+h] - prices[t+1]) / prices[t+1])",
+  "label_check_h1": "PASS (h=1 fraction equal to X_t: 0.0199, must be <0.99)",
+  "sigma_anchor": 1.0,
+  "sigma_actual_N55": 1.0,
+  "training_loss": "soft Gaussian KL (sigma > 0)",
+  "model_input": "StateConditionedNet: cat([one_hot(X_t, N_XT), F_t], dim=-1) -> MLP -> logits",
+  "architecture": [
+    64,
+    128,
+    256,
+    128,
+    64
+  ],
+  "dropout": 0.2,
+  "lr": 0.001,
+  "weight_decay": 0.0001,
+  "max_epochs": 100,
+  "patience": 10,
+  "train_size": 1650,
+  "val_size": 354,
+  "test_size": 354,
+  "optimal_setup_cache_status": "9 OptimalSetup cache files found under /Users/JanRovirosaIlla/DeepMarkovResearch/results/optimal_setup/cache"
+}

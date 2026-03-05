@@ -417,3 +417,217 @@ def plot_reliability_curve(
     safe = event_name.replace(" ", "_").replace("<", "lt").replace(">", "gt")
     save_fig(fig, Path(out_dir) / f"reliability_{safe}")
     return fig
+
+
+# ---------------------------------------------------------------------------
+# Section G: Learning curves
+# ---------------------------------------------------------------------------
+
+def plot_learning_curve(
+    df: pd.DataFrame,
+    h: int,
+    N: int,
+    out_dir: str | Path,
+    metric: str = "nll_test",
+) -> plt.Figure:
+    """NLL vs train_frac for each model, one subplot per (h, N).
+
+    df must have columns: model, h, N, train_frac, seed, nll_val, nll_test
+    """
+    _set_style()
+    sub = df[(df["h"] == h) & (df["N"] == N)].copy()
+    if len(sub) == 0:
+        fig, ax = plt.subplots()
+        ax.set_title(f"No data for h={h} N={N}")
+        return fig
+
+    fig, ax = plt.subplots(figsize=(7, 4))
+    colors = {"state_cond": "#1f77b4", "state_free": "#ff7f0e", "backoff": "#2ca02c"}
+    markers = {"state_cond": "o", "state_free": "s", "backoff": "^"}
+
+    for model_type, grp in sub.groupby("model"):
+        # Average over seeds; plot with shaded std if multiple seeds
+        agg = grp.groupby("train_frac")[metric].agg(["mean", "std"]).reset_index()
+        color = colors.get(model_type, None)
+        marker = markers.get(model_type, "D")
+        ax.plot(agg["train_frac"], agg["mean"], marker=marker, label=model_type,
+                color=color, linewidth=1.8)
+        if agg["std"].notna().any() and (agg["std"] > 0).any():
+            ax.fill_between(
+                agg["train_frac"],
+                agg["mean"] - agg["std"],
+                agg["mean"] + agg["std"],
+                alpha=0.15, color=color,
+            )
+
+    ax.set_xlabel("Train fraction", fontsize=12)
+    ax.set_ylabel(f"NLL ({metric})", fontsize=12)
+    ax.set_title(f"Prefix Learning Curves — h={h}, N={N}", fontsize=12)
+    ax.legend(title="Model")
+    ax.set_xticks([0.25, 0.5, 0.75, 1.0])
+    fig.tight_layout()
+    save_fig(fig, Path(out_dir) / f"learning_curve_nll_{h}_{N}")
+    return fig
+
+
+# ---------------------------------------------------------------------------
+# Section I: Depth ablation
+# ---------------------------------------------------------------------------
+
+def plot_depth_ablation_bar(
+    df: pd.DataFrame,
+    h: int,
+    N: int,
+    out_dir: str | Path,
+) -> plt.Figure:
+    """Grouped bar chart comparing shallow vs deep NLL for each model type.
+
+    df must have columns: model, arch, h, N, seed, nll_test
+    """
+    _set_style()
+    sub = df[(df["h"] == h) & (df["N"] == N)].copy()
+    if len(sub) == 0:
+        fig, ax = plt.subplots()
+        ax.set_title(f"No data for h={h} N={N}")
+        return fig
+
+    agg = sub.groupby(["model", "arch"])["nll_test"].agg(["mean", "std"]).reset_index()
+    models = agg["model"].unique()
+    archs = ["shallow", "deep"]
+    x = np.arange(len(models))
+    width = 0.35
+
+    fig, ax = plt.subplots(figsize=(7, 4))
+    palette = {"shallow": "#aec7e8", "deep": "#1f77b4"}
+
+    for i, arch in enumerate(archs):
+        vals = []
+        errs = []
+        for m in models:
+            row = agg[(agg["model"] == m) & (agg["arch"] == arch)]
+            vals.append(float(row["mean"].values[0]) if len(row) else np.nan)
+            errs.append(float(row["std"].values[0]) if len(row) else 0.0)
+        offset = (i - 0.5) * width
+        bars = ax.bar(x + offset, vals, width, label=arch,
+                      color=palette.get(arch, None),
+                      yerr=[np.nan_to_num(e) for e in errs],
+                      capsize=4, error_kw={"elinewidth": 1.2})
+
+    ax.set_xticks(x)
+    ax.set_xticklabels(models, fontsize=11)
+    ax.set_ylabel("NLL (test, nats)", fontsize=12)
+    ax.set_title(f"Depth Ablation — h={h}, N={N}", fontsize=12)
+    ax.legend(title="Architecture")
+    fig.tight_layout()
+    save_fig(fig, Path(out_dir) / f"depth_ablation_bar_{h}_{N}")
+    return fig
+
+
+# ---------------------------------------------------------------------------
+# Section J: Generalization gap + spectral norm
+# ---------------------------------------------------------------------------
+
+def plot_gen_gap(
+    history: dict,
+    out_dir: str | Path,
+    prefix: str = "gengap",
+) -> List[plt.Figure]:
+    """Two plots: (1) gap vs epoch, (2) NLL curves (train+val) vs epoch.
+
+    history must have keys: train_nll, val_nll (lists of per-epoch values).
+    Returns list of two figures.
+    """
+    _set_style()
+    figs = []
+    epochs = np.arange(1, len(history["train_nll"]) + 1)
+    train_nll = np.array(history["train_nll"])
+    val_nll = np.array(history["val_nll"])
+    gap = val_nll - train_nll
+
+    # Plot 1: NLL curves
+    fig1, ax1 = plt.subplots(figsize=(7, 4))
+    ax1.plot(epochs, train_nll, label="Train NLL", color="#1f77b4")
+    ax1.plot(epochs, val_nll, label="Val NLL", color="#ff7f0e")
+    ax1.set_xlabel("Epoch")
+    ax1.set_ylabel("NLL (nats)")
+    ax1.set_title("Train vs Val NLL per Epoch")
+    ax1.legend()
+    fig1.tight_layout()
+    save_fig(fig1, Path(out_dir) / f"{prefix}_nll_curves")
+    figs.append(fig1)
+
+    # Plot 2: generalization gap
+    fig2, ax2 = plt.subplots(figsize=(7, 4))
+    ax2.plot(epochs, gap, color="#d62728")
+    ax2.axhline(0, color="gray", linestyle="--", linewidth=0.8)
+    ax2.set_xlabel("Epoch")
+    ax2.set_ylabel("Val NLL − Train NLL (gap)")
+    ax2.set_title("Generalization Gap per Epoch")
+    fig2.tight_layout()
+    save_fig(fig2, Path(out_dir) / f"{prefix}_gap")
+    figs.append(fig2)
+
+    return figs
+
+
+# ---------------------------------------------------------------------------
+# Section K: Feature-dimension ablation
+# ---------------------------------------------------------------------------
+
+def plot_feature_ablation(
+    df: pd.DataFrame,
+    h: int,
+    N: int,
+    out_dir: str | Path,
+) -> plt.Figure:
+    """Three-panel figure: test_nll / gen_gap / spectral_product vs n_features.
+
+    df must have columns:
+        n_features, train_nll, val_nll, test_nll, gen_gap, spectral_product
+    Only rows matching h, N are used.
+    """
+    _set_style()
+    sub = df[(df["horizon"] == h) & (df["N_bins"] == N)].copy()
+    if len(sub) == 0:
+        fig, ax = plt.subplots()
+        ax.set_title(f"No data for h={h} N={N}")
+        return fig
+
+    sub = sub.sort_values("n_features")
+    x = sub["n_features"].values
+
+    fig, axes = plt.subplots(1, 3, figsize=(13, 4))
+
+    # Panel 1: test NLL
+    axes[0].plot(x, sub["test_nll"].values, "o-", color="#1f77b4", linewidth=1.8)
+    if "val_nll" in sub.columns:
+        axes[0].plot(x, sub["val_nll"].values, "s--", color="#aec7e8",
+                     linewidth=1.2, label="val NLL")
+        axes[0].legend(fontsize=9)
+    axes[0].set_xlabel("Number of input features", fontsize=11)
+    axes[0].set_ylabel("NLL (nats)", fontsize=11)
+    axes[0].set_title("Test NLL vs Feature Dim", fontsize=11)
+    axes[0].set_xticks(x)
+
+    # Panel 2: generalization gap
+    axes[1].plot(x, sub["gen_gap"].values, "o-", color="#d62728", linewidth=1.8)
+    axes[1].axhline(0, color="gray", linestyle="--", linewidth=0.8)
+    axes[1].set_xlabel("Number of input features", fontsize=11)
+    axes[1].set_ylabel("Test NLL − Train NLL", fontsize=11)
+    axes[1].set_title("Generalization Gap vs Feature Dim", fontsize=11)
+    axes[1].set_xticks(x)
+
+    # Panel 3: spectral norm product
+    if sub["spectral_product"].notna().any():
+        axes[2].plot(x, sub["spectral_product"].values, "o-", color="#2ca02c", linewidth=1.8)
+        axes[2].set_xlabel("Number of input features", fontsize=11)
+        axes[2].set_ylabel("Spectral norm product", fontsize=11)
+        axes[2].set_title("Spectral Norm Product vs Feature Dim", fontsize=11)
+        axes[2].set_xticks(x)
+    else:
+        axes[2].set_visible(False)
+
+    fig.suptitle(f"Feature-Dimension Ablation — h={h}, N={N}", fontsize=13, y=1.01)
+    fig.tight_layout()
+    save_fig(fig, Path(out_dir) / f"feature_ablation_h{h}_N{N}")
+    return fig

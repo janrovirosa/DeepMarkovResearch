@@ -1,0 +1,3 @@
+model,h,mean_kl,mean_tv,frobenius,note
+state_cond,1,0.0,0.0,0.0,h=1: trivial (identity composition)
+state_free,1,0.0,0.0,0.0,h=1: trivial (identity composition)
