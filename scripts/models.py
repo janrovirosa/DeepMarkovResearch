@@ -79,6 +79,46 @@ class StateFreeNet(nn.Module):
 # Optional continuous baselines
 # ---------------------------------------------------------------------------
 
+# ---------------------------------------------------------------------------
+# Utilities
+# ---------------------------------------------------------------------------
+
+def count_params(model: nn.Module) -> int:
+    """Count total trainable parameters."""
+    return sum(p.numel() for p in model.parameters() if p.requires_grad)
+
+
+def shallow_matched_hidden_dim(
+    model_class,
+    target_params: int,
+    **model_kwargs,
+) -> int:
+    """Binary-search for a single hidden-dim H such that a shallow (1-layer) version
+    of model_class has total params closest to target_params.
+
+    model_kwargs must be all constructor args EXCEPT hidden_dims.
+    Returns H (int).
+    """
+    lo, hi = 1, 4096
+    best_h, best_diff = lo, float("inf")
+    for _ in range(20):  # 20 bisections → precision ≤ 1
+        mid = (lo + hi) // 2
+        try:
+            m = model_class(**model_kwargs, hidden_dims=(mid,))
+            p = count_params(m)
+        except Exception:
+            hi = mid - 1
+            continue
+        diff = abs(p - target_params)
+        if diff < best_diff:
+            best_diff, best_h = diff, mid
+        if p < target_params:
+            lo = mid + 1
+        else:
+            hi = mid - 1
+    return best_h
+
+
 class GaussHeteroNet(nn.Module):
     """F_t -> (mu, log_sigma) for heteroskedastic Gaussian over continuous returns.
 

@@ -1,0 +1,5 @@
+baseline,test_nll,note
+uniform,4.007333185232471,= log(55) = 4.007333
+marginal,4.007332635232622,
+additive,4.007644857846046,best alpha=10.0
+backoff,4.007273110671144,"best alpha=10.0, tau=1000"

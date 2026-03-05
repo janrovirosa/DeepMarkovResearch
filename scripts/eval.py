@@ -557,6 +557,110 @@ def compute_brier(
 
 
 # ---------------------------------------------------------------------------
+# MIR / Irreducible entropy floor
+# ---------------------------------------------------------------------------
+
+def compute_H_irr_from_counts(C: np.ndarray, eps: float = 1e-12) -> float:
+    """Compute irreducible entropy floor from empirical joint count matrix.
+
+    Parameters
+    ----------
+    C   : np.ndarray, shape (N_X, N_Y) — joint count matrix on TRAIN
+    eps : float — Laplace-style smoothing (avoids log(0))
+
+    Returns
+    -------
+    H_irr : float (nats)
+        H_irr = sum_i pi_hat[i] * H(P_emp[i,:])
+        where pi_hat[i] = row_sum[i] / sum(C)
+              P_emp[i,:] = (C[i,:] + eps) / (row_sum[i] + N_Y * eps)
+
+    Interpretation
+    --------------
+    H_irr is the minimum achievable per-sample NLL under the **empirical**
+    conditional P(Y|X) on training data.  A neural model with NLL near H_irr
+    has learned essentially all the predictable structure in the transition matrix.
+    """
+    C = C.astype(np.float64)
+    N_X, N_Y = C.shape
+    row_sums = C.sum(axis=1)
+    total = row_sums.sum()
+    if total == 0:
+        return np.nan
+
+    # Empirical state (input) distribution
+    pi_hat = row_sums / total  # shape (N_X,)
+
+    # Row-stochastic P_emp with additive smoothing
+    P_emp = (C + eps) / (row_sums[:, None] + N_Y * eps)  # (N_X, N_Y)
+
+    # Row entropy: H(P_emp[i,:]) = -sum_j P[i,j] * log(P[i,j])
+    log_P = np.log(np.clip(P_emp, eps, None))
+    row_entropy = -(P_emp * log_P).sum(axis=1)  # (N_X,)
+
+    # Weight by empirical state distribution
+    return float((pi_hat * row_entropy).sum())
+
+
+def compute_MIR(nll_model: float, H_irr: float) -> float:
+    """Markov Information Ratio: fraction of reducible entropy captured.
+
+    Parameters
+    ----------
+    nll_model : float — model NLL per sample in nats (= -mean_ll, positive)
+    H_irr     : float — irreducible entropy floor (nats, positive)
+
+    Returns
+    -------
+    MIR : float
+        MIR = (H_irr - nll_model) / H_irr
+
+    Interpretation
+    --------------
+    MIR measures how close the model is to the empirical entropy ceiling H_irr.
+    MIR = 0  ⟹ model NLL equals H_irr (oracle-level under empirical P)
+    MIR < 0  ⟹ model NLL > H_irr (model is worse than the empirical oracle)
+    The gap |MIR| quantifies residual uncertainty above the floor.
+
+    NOTE: Because H_irr is estimated on training data with limited samples,
+    a well-regularized neural model can sometimes achieve nll_model < H_irr
+    on the test set (positive MIR) via generalisation.
+    """
+    if H_irr == 0 or not np.isfinite(H_irr):
+        return np.nan
+    return float((H_irr - nll_model) / H_irr)
+
+
+# ---------------------------------------------------------------------------
+# Spectral norm product (for generalization gap proxy)
+# ---------------------------------------------------------------------------
+
+def compute_spectral_norm_product(model) -> float:
+    """Product of max singular values (spectral norms) across all Linear layers.
+
+    Used as a PAC-Bayes style capacity proxy: larger spectral product ↔
+    larger function-space Lipschitz constant ↔ potentially larger gen gap.
+
+    Returns
+    -------
+    spec_prod : float  (or np.nan if no Linear layers found)
+    """
+    import torch
+    spec_prod = 1.0
+    n_layers = 0
+    for module in model.modules():
+        if isinstance(module, torch.nn.Linear):
+            W = module.weight.detach().float()
+            try:
+                svs = torch.linalg.svdvals(W)
+                spec_prod *= float(svs[0])
+                n_layers += 1
+            except Exception:
+                pass
+    return float(spec_prod) if n_layers > 0 else np.nan
+
+
+# ---------------------------------------------------------------------------
 # Block bootstrap CI
 # ---------------------------------------------------------------------------
 

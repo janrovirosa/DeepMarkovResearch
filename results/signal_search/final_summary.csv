@@ -1,0 +1,11 @@
+metric,value
+uniform_nll,4.007333185232471
+marginal_nll,4.007332635232622
+additive_nll,4.007644857846046
+best_neural_nll,4.006007194519043
+best_source,sigma_sweep
+delta_vs_uniform,0.0013259907134282045
+delta_vs_marginal,0.0013254407135789847
+delta_vs_additive,0.0016376633270027696
+threshold,0.001
+target_met,True
