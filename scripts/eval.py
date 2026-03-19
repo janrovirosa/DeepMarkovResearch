@@ -273,8 +273,12 @@ def compute_transition_sparsity(
     row_sums = C.sum(axis=1)
 
     # Cell-level sparsity
-    frac_cells_zero = float((C == 0).mean())
-    frac_cells_lt5  = float((C < 5).mean())
+    frac_cells_zero  = float((C == 0).mean())
+    frac_cells_lt5   = float((C < 5).mean())
+    frac_cells_lt10  = float((C < 10).mean())
+    # Row-level sparsity (fraction of input states with too few total observations)
+    frac_rows_lt5    = float((row_sums < 5).mean())
+    frac_rows_lt10   = float((row_sums < 10).mean())
     nonzero_per_row = (C > 0).sum(axis=1)
     median_nonzero_per_row = float(np.median(nonzero_per_row))
     p90_nonzero_per_row    = float(np.percentile(nonzero_per_row, 90))
@@ -294,6 +298,9 @@ def compute_transition_sparsity(
         "row_sums": row_sums,
         "frac_cells_zero": frac_cells_zero,
         "frac_cells_lt5": frac_cells_lt5,
+        "frac_cells_lt10": frac_cells_lt10,
+        "frac_rows_lt5": frac_rows_lt5,
+        "frac_rows_lt10": frac_rows_lt10,
         "median_nonzero_per_row": median_nonzero_per_row,
         "p90_nonzero_per_row": p90_nonzero_per_row,
         "median_row_entropy_empirical": median_row_entropy_empirical,
