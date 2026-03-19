@@ -296,14 +296,28 @@ def plot_At_heatmap_snapshot(
     t_label: str,
     out_dir: str | Path,
     model_name: str = "",
+    vmin: Optional[float] = None,
+    vmax: Optional[float] = None,
 ) -> plt.Figure:
-    """Heatmap of a single 55×55 A_t transition matrix."""
+    """Heatmap of a single 55×55 A_t transition matrix.
+
+    Pass vmin/vmax to enforce a shared colour scale across multiple snapshots.
+    When either is provided the title notes '[shared scale]'.
+    """
     _set_style()
+    _vmin = 0.0 if vmin is None else float(vmin)
+    _vmax = float(A.max()) if vmax is None else float(vmax)
+    shared = (vmin is not None) or (vmax is not None)
+
     fig, ax = plt.subplots(figsize=(7, 6))
-    im = ax.imshow(A, aspect="auto", cmap="Blues", vmin=0, vmax=A.max())
+    im = ax.imshow(A, aspect="auto", cmap="Blues", vmin=_vmin, vmax=_vmax)
     plt.colorbar(im, ax=ax, label="P(next state | current state, F_t)")
-    ax.set_title(f"A_t Transition Matrix — {t_label}" +
-                 (f"\n(model: {model_name})" if model_name else ""))
+    title = f"A_t Transition Matrix — {t_label}"
+    if model_name:
+        title += f"\n(model: {model_name})"
+    if shared:
+        title += "  [shared scale]"
+    ax.set_title(title)
     ax.set_xlabel("Output state X_{t+h}")
     ax.set_ylabel("Input state X_t")
     # Only label every 10th tick for readability
@@ -312,7 +326,9 @@ def plot_At_heatmap_snapshot(
     ax.set_yticks(ticks)
     fig.tight_layout()
     safe_label = t_label.replace("/", "-").replace(" ", "_")
-    save_fig(fig, Path(out_dir) / f"At_heatmap_{safe_label}")
+    safe_model = model_name.replace(" ", "_") if model_name else ""
+    fname = f"At_heatmap_{safe_model}_{safe_label}" if safe_model else f"At_heatmap_{safe_label}"
+    save_fig(fig, Path(out_dir) / fname)
     return fig
 
 
