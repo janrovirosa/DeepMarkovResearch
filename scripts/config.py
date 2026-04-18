@@ -54,6 +54,10 @@ class ExperimentConfig:
         default_factory=lambda: [(1, 55), (10, 55)]
     )
 
+    # SWA (Stochastic Weight Averaging)
+    use_swa: bool = False
+    swa_epochs: int = 10
+
     # Runtime metadata (filled by make_config())
     date_stamp: str = ""
     git_hash: str = ""

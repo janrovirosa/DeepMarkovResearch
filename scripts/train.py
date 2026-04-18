@@ -6,6 +6,8 @@ and an optional train_continuous for GaussHeteroNet / MDNNet.
 """
 from __future__ import annotations
 
+import copy
+from collections import deque
 from pathlib import Path
 from typing import Any, Dict, Tuple
 
@@ -107,6 +109,8 @@ def train_one_run(
     grad_clip: float = 1.0,
     verbose: bool = False,
     log_nll: bool = False,
+    use_swa: bool = False,
+    swa_epochs: int = 10,
 ) -> Tuple[Dict, Dict]:
     """Train model with AdamW, ReduceLROnPlateau, early stopping.
 
@@ -116,8 +120,15 @@ def train_one_run(
         If True, also compute per-epoch cross-entropy NLL on train and val sets
         and store in history["train_nll"] and history["val_nll"]. This doubles
         evaluation time per epoch but is needed for generalization gap analysis.
+    use_swa : bool
+        If True, maintain a rolling buffer of the last swa_epochs checkpoints and
+        return the averaged weights at termination. Raises RuntimeError if the
+        buffer is empty when training ends.
+    swa_epochs : int
+        Rolling buffer size for SWA. Averaging uses however many epochs ran if
+        training stops early.
 
-    Returns (best_state_dict, history_dict).
+    Returns (best_state_dict_or_swa_state, history_dict).
     """
     model = model.to(device)
     optimizer = torch.optim.AdamW(model.parameters(), lr=lr, weight_decay=weight_decay)
@@ -130,6 +141,8 @@ def train_one_run(
     if log_nll:
         history["train_nll"] = []
         history["val_nll"] = []
+
+    swa_buffer: deque = deque(maxlen=swa_epochs)
 
     for epoch in range(1, max_epochs + 1):
         # ── Train ──
@@ -198,6 +211,9 @@ def train_one_run(
         else:
             epochs_no_improve += 1
 
+        if use_swa:
+            swa_buffer.append(copy.deepcopy({k: v.cpu() for k, v in model.state_dict().items()}))
+
         if verbose and (epoch % 20 == 0 or epoch == 1):
             print(f"  epoch {epoch:>3}: train={avg_t:.4f} val={avg_v:.4f} "
                   f"t_acc={t_correct/t_n:.3f} v_acc={v_correct/v_n:.3f}")
@@ -206,6 +222,19 @@ def train_one_run(
             if verbose:
                 print(f"  Early stop at epoch {epoch}")
             break
+
+    if use_swa:
+        if len(swa_buffer) == 0:
+            raise RuntimeError("SWA buffer is empty — no epochs ran")
+        avg_state: Dict[str, torch.Tensor] = {}
+        keys = list(swa_buffer[0].keys())
+        for k in keys:
+            stacked = torch.stack([sd[k].float() for sd in swa_buffer])
+            avg_state[k] = stacked.mean(dim=0).to(swa_buffer[0][k].dtype)
+        print(f"[SWA] Averaged {len(swa_buffer)} checkpoints")
+        model.load_state_dict(avg_state)
+        model.to(device)
+        return avg_state, history
 
     model.load_state_dict(best_state)
     model.to(device)

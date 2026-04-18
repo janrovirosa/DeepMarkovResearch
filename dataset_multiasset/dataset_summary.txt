@@ -1,0 +1,12 @@
+Multi-Asset Dataset Summary
+============================================================
+JPM    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+C      | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+WFC    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+GS     | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+MS     | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+PNC    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+USB    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+FITB   | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+MTB    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
+BAC    | rows=6184 | 1999-06-04 → 2023-12-29 | features=67 | NaN=0 | train=4328 val=928 test=928
