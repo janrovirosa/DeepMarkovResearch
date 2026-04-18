@@ -1,0 +1,17 @@
+# Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# Weight files — too large for git; re-generated from cache
+results_multiasset/**/weights/*.pt
+
+# SWA / sweep training cache — re-generated automatically
+results_multiasset/_cache/
+
+# OS artefacts
+.DS_Store

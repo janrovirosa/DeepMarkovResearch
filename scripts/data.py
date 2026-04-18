@@ -5,8 +5,9 @@ with minor wrapping for reuse.
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
-from typing import Tuple
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
@@ -18,8 +19,16 @@ EPS = 1e-8
 # Master dataset
 # ---------------------------------------------------------------------------
 
-def load_master_dataset(data_dir: str | Path = "dataset"):
-    """Load train_diagnostic.csv.
+def load_master_dataset(data_dir: str | Path = "dataset", ticker: str | None = None):
+    """Load single-asset or multi-asset dataset.
+
+    When *ticker* is given, loads from
+    ``dataset_multiasset/prices_{ticker}.csv`` and
+    ``dataset_multiasset/features_{ticker}.csv``.
+    Features are already standardised; F_raw is returned as-is (float32).
+
+    When *ticker* is None (default), loads the original single-asset
+    ``train_diagnostic.csv`` from *data_dir* — unchanged behaviour.
 
     Returns
     -------
@@ -27,6 +36,19 @@ def load_master_dataset(data_dir: str | Path = "dataset"):
     F_raw  : np.ndarray, shape (T, n_features)
     feature_cols : list[str]
     """
+    if ticker is not None:
+        base = Path(data_dir).parent / "dataset_multiasset"
+        prices_df  = pd.read_csv(base / f"prices_{ticker}.csv",   parse_dates=["date"])
+        features_df = pd.read_csv(base / f"features_{ticker}.csv", parse_dates=["date"])
+
+        assert (prices_df["date"].values == features_df["date"].values).all(), \
+            f"{ticker}: prices and features date columns are misaligned"
+
+        prices       = prices_df["price"].values.astype(np.float64)
+        feature_cols = [c for c in features_df.columns if c != "date"]
+        F_raw        = features_df[feature_cols].values.astype(np.float32)
+        return prices, F_raw, feature_cols
+
     data_dir = Path(data_dir)
     train_df = pd.read_csv(data_dir / "train_diagnostic.csv")
 
@@ -134,3 +156,55 @@ def build_all_ck_splits(X_t_all: np.ndarray, horizons: list) -> dict:
             "idx_test": idx_test,
         }
     return ck_splits
+
+
+# ---------------------------------------------------------------------------
+# Feature subset selection (regime conditioning)
+# ---------------------------------------------------------------------------
+
+_MACRO_FEATURE_NAMES = ["DFF", "T10Y2Y", "BAA10Y", "VIXCLS", "DCOILWTICO", "USREC"]
+
+
+def build_feature_subset(
+    F_raw: np.ndarray,
+    feature_cols: List[str],
+    regime: str,
+    target_ticker: str | None = None,
+) -> Tuple[np.ndarray, List[str]]:
+    """Return (F_subset, subset_feature_cols) for the given conditioning regime.
+
+    Parameters
+    ----------
+    F_raw        : (T, n_feat) feature matrix (already standardised for multi-asset)
+    feature_cols : ordered list of feature column names matching F_raw columns
+    regime       : 'full' | 'macro_only' | 'own_only'
+    target_ticker: required when regime='own_only'; used to match lag column names
+
+    Returns
+    -------
+    F_subset         : (T, n_subset)
+    subset_feat_cols : list[str] of length n_subset
+    """
+    if regime == "full":
+        return F_raw, list(feature_cols)
+
+    if regime == "macro_only":
+        keep = [c for c in feature_cols if c in _MACRO_FEATURE_NAMES]
+        if not keep:
+            raise ValueError("No macro feature columns found in feature_cols")
+        idx = [feature_cols.index(c) for c in keep]
+        return F_raw[:, idx], keep
+
+    if regime == "own_only":
+        if target_ticker is None:
+            raise ValueError("target_ticker is required for regime='own_only'")
+        pat = re.compile(rf"^lag\d+_return_{re.escape(target_ticker)}$")
+        keep = [c for c in feature_cols if pat.match(c) or c in ("volume", "log_volume")]
+        if not keep:
+            raise ValueError(
+                f"No 'own_only' columns found for ticker={target_ticker!r} in feature_cols"
+            )
+        idx = [feature_cols.index(c) for c in keep]
+        return F_raw[:, idx], keep
+
+    raise ValueError(f"Unknown regime {regime!r}; choose from 'full', 'macro_only', 'own_only'")

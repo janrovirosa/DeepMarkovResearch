@@ -1,0 +1,14 @@
+Results directory: /Users/JanRovirosaIlla/DeepMarkovResearch/results_multiasset
+Device: mps
+
+============================================================
+EXPERIMENT A — Baseline
+============================================================
+  [A] JPM state_cond h=1 seed=42 → nll_test=3.9560  Δ=-0.0513
+  [A] JPM state_free h=1 seed=42 → nll_test=3.9541  Δ=-0.0532
+  [A] JPM state_cond h=2 seed=42 → nll_test=3.9649  Δ=-0.0424
+  [A] JPM state_free h=2 seed=42 → nll_test=3.9746  Δ=-0.0327
+  [A] JPM state_cond h=5 seed=42 → nll_test=3.9696  Δ=-0.0377
+  [A] JPM state_free h=5 seed=42 → nll_test=3.9709  Δ=-0.0364
+  [A] JPM state_cond h=10 seed=42 → nll_test=3.9806  Δ=-0.0267
+  [A] JPM state_free h=10 seed=42 → nll_test=3.9849  Δ=-0.0224
