@@ -62,7 +62,8 @@ class HigherOrderStateConditionedNet(nn.Module):
         if x_history.dim() == 1:
             x_history = x_history.unsqueeze(1)  # (B,) → (B, 1) for k=1
 
-        parts = [F.one_hot(x_history[:, i], num_classes=self.n_xt_states).float()
+        # Compute one_hot on CPU to avoid DirectML scatter limitations.
+        parts = [F.one_hot(x_history[:, i].cpu(), num_classes=self.n_xt_states).float().to(features.device)
                  for i in range(self.k)]
         z = torch.cat(parts + [features], dim=-1)
         return self.out(self.mlp(z))

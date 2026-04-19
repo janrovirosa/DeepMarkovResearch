@@ -45,7 +45,9 @@ class StateConditionedNet(nn.Module):
         self.out = nn.Linear(in_dim, n_output)
 
     def forward(self, features: torch.Tensor, x_t: torch.Tensor) -> torch.Tensor:
-        s_onehot = F.one_hot(x_t, num_classes=self.n_xt_states).float()
+        # Compute one_hot on CPU first to avoid DirectML scatter limitations,
+        # then move to whatever device features lives on.
+        s_onehot = F.one_hot(x_t.cpu(), num_classes=self.n_xt_states).float().to(features.device)
         z = torch.cat([s_onehot, features], dim=-1)
         return self.out(self.mlp(z))
 

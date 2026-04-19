@@ -1,0 +1,12 @@
+{
+  "sigma": 1.0,
+  "use_swa": false,
+  "swa_epochs": 10,
+  "N": 55,
+  "horizons": [
+    1,
+    2,
+    5,
+    10
+  ]
+}

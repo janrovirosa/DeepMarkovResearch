@@ -1,0 +1,8 @@
+{
+  "k": 5,
+  "sigma": 1.0,
+  "use_swa": true,
+  "swa_epochs": 10,
+  "h": 1,
+  "N": 55
+}

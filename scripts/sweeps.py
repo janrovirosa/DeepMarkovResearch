@@ -97,7 +97,7 @@ def sweep_sigma(
 
             rows.append({"sigma": sigma, "seed": seed, "nll_val": nll_val, "nll_test": nll_test})
             print(f"  sweep  {ticker} h={h} N={N} sigma={sigma} seed={seed} "
-                  f"→ nll_val={nll_val:.4f}  nll_test={nll_test:.4f}")
+                  f"-> nll_val={nll_val:.4f}  nll_test={nll_test:.4f}")
 
     df = pd.DataFrame(rows)
     best_sigma = df.groupby("sigma")["nll_val"].mean().idxmin()
