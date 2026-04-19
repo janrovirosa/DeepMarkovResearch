@@ -164,6 +164,9 @@ def build_all_ck_splits(X_t_all: np.ndarray, horizons: list) -> dict:
 
 _MACRO_FEATURE_NAMES = ["DFF", "T10Y2Y", "BAA10Y", "VIXCLS", "DCOILWTICO", "USREC"]
 
+_BANK_TICKERS = {"JPM", "C", "WFC", "GS", "MS", "PNC", "USB", "FITB", "MTB", "BAC"}
+_INDEX_TICKERS = {"SPY", "XLF"}
+
 
 def build_feature_subset(
     F_raw: np.ndarray,
@@ -177,8 +180,8 @@ def build_feature_subset(
     ----------
     F_raw        : (T, n_feat) feature matrix (already standardised for multi-asset)
     feature_cols : ordered list of feature column names matching F_raw columns
-    regime       : 'full' | 'macro_only' | 'own_only'
-    target_ticker: required when regime='own_only'; used to match lag column names
+    regime       : 'full' | 'macro_only' | 'own_only' | 'other_banks_only'
+    target_ticker: required for 'own_only' and 'other_banks_only'
 
     Returns
     -------
@@ -207,4 +210,31 @@ def build_feature_subset(
         idx = [feature_cols.index(c) for c in keep]
         return F_raw[:, idx], keep
 
-    raise ValueError(f"Unknown regime {regime!r}; choose from 'full', 'macro_only', 'own_only'")
+    if regime == "other_banks_only":
+        if target_ticker is None:
+            raise ValueError("target_ticker is required for regime='other_banks_only'")
+        # Keep contemporaneous returns and all lag features for any bank/index ticker
+        # other than the target. Drop macro features and all own-stock features.
+        keep_tickers = (_BANK_TICKERS | _INDEX_TICKERS) - {target_ticker}
+        cont_pat = re.compile(r"^return_(.+)$")
+        lag_pat = re.compile(r"^lag\d+_return_(.+)$")
+        keep = []
+        for c in feature_cols:
+            m = cont_pat.match(c)
+            if m and m.group(1) in keep_tickers:
+                keep.append(c)
+                continue
+            m = lag_pat.match(c)
+            if m and m.group(1) in keep_tickers:
+                keep.append(c)
+        if not keep:
+            raise ValueError(
+                f"No 'other_banks_only' columns found for ticker={target_ticker!r} in feature_cols"
+            )
+        print(f"other_banks_only [{target_ticker}]: {len(keep)} features")
+        idx = [feature_cols.index(c) for c in keep]
+        return F_raw[:, idx], keep
+
+    raise ValueError(
+        f"Unknown regime {regime!r}; choose from 'full', 'macro_only', 'own_only', 'other_banks_only'"
+    )
