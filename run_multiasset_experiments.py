@@ -56,8 +56,14 @@ TARGET_STOCKS = ["JPM", "C", "WFC", "GS", "MS", "PNC", "USB", "FITB", "MTB", "BA
 N_BINS = 55
 RESULTS_DIR = Path("results_multiasset")
 CACHE_DIR = RESULTS_DIR / "_cache"
-DEVICE = torch.device("cuda" if torch.cuda.is_available()
-                      else ("mps" if torch.backends.mps.is_available() else "cpu"))
+try:
+    import torch_directml
+    DEVICE = torch_directml.device()
+    print(f"[device] Using AMD GPU via DirectML: {DEVICE}")
+except ImportError:
+    DEVICE = torch.device("cuda" if torch.cuda.is_available()
+                          else ("mps" if torch.backends.mps.is_available() else "cpu"))
+    print(f"[device] DirectML not found, falling back to: {DEVICE}")
 
 
 # ---------------------------------------------------------------------------
@@ -158,7 +164,7 @@ def run_one(
     delta     = nll_test - _marginal_nll(N_actual)
 
     print(f"  [{experiment_prefix}] {ticker} {model_type:10s} h={h} seed={seed} "
-          f"→ nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+          f"-> nll_test={nll_test:.4f}  delta={delta:+.4f}")
 
     return {
         "model": model_type, "h": h, "seed": seed,
@@ -341,7 +347,7 @@ def run_experiment_D(cfg: ExperimentConfig, best_sigma: float):
                 nll_val  = -val_m["mean_ll"]
                 nll_test = -test_m["mean_ll"]
                 delta = nll_test - _marginal_nll(N_actual)
-                print(f"  [D] k={k} seed={seed} → nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+                print(f"  [D] k={k} seed={seed} -> nll_test={nll_test:.4f}  delta={delta:+.4f}")
 
                 save_results(
                     RESULTS_DIR, ticker, "higher_order",
@@ -418,7 +424,7 @@ def run_experiment_E(cfg: ExperimentConfig, best_sigma: float):
                 nll_val  = -val_m["mean_ll"]
                 nll_test = -test_m["mean_ll"]
                 delta = nll_test - _marginal_nll(N_actual)
-                print(f"  [E] regime={regime} seed={seed} → nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+                print(f"  [E] regime={regime} seed={seed} -> nll_test={nll_test:.4f}  delta={delta:+.4f}")
 
                 save_results(
                     RESULTS_DIR, ticker, "conditioning_regime",

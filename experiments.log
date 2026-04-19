@@ -1,0 +1,351 @@
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+C:\Users\jcsch\AppData\Local\Programs\Python\Python312\Lib\site-packages\torch\nn\functional.py:3006: UserWarning: The operator 'aten::xlogy.OutTensor' is not currently supported on the DML backend and will fall back to run on the CPU. This may have performance implications. (Triggered internally at C:\__w\1\s\pytorch-directml-plugin\torch_directml\csrc\dml\dml_cpu_fallback.cpp:17.)
+  reduced = torch.kl_div(input, target, reduction_enum, log_target=log_target)
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+C:\Users\jcsch\Downloads\DeepMarkovResearch\scripts\train.py:348: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  state_dict = torch.load(path, map_location="cpu")
+[device] Using AMD GPU via DirectML: privateuseone:0
+Results directory: C:\Users\jcsch\Downloads\DeepMarkovResearch\results_multiasset
+Device: privateuseone:0
+
+============================================================
+EXPERIMENT A — Baseline
+============================================================
+  [A] JPM state_cond h=1 seed=42 -> nll_test=3.9549  delta=-0.0524
+  [A] JPM state_free h=1 seed=42 -> nll_test=3.9534  delta=-0.0539
+  [A] JPM state_cond h=2 seed=42 -> nll_test=3.9715  delta=-0.0359
+  [A] JPM state_free h=2 seed=42 -> nll_test=3.9749  delta=-0.0325
+  [A] JPM state_cond h=5 seed=42 -> nll_test=3.9712  delta=-0.0361
+  [A] JPM state_free h=5 seed=42 -> nll_test=3.9696  delta=-0.0377
+  [A] JPM state_cond h=10 seed=42 -> nll_test=3.9760  delta=-0.0314
+  [A] JPM state_free h=10 seed=42 -> nll_test=3.9820  delta=-0.0254
+  [A] C state_cond h=1 seed=42 -> nll_test=3.9599  delta=-0.0474
+  [A] C state_free h=1 seed=42 -> nll_test=3.9504  delta=-0.0569
+  [A] C state_cond h=2 seed=42 -> nll_test=3.9707  delta=-0.0367
+  [A] C state_free h=2 seed=42 -> nll_test=3.9753  delta=-0.0320
+  [A] C state_cond h=5 seed=42 -> nll_test=3.9704  delta=-0.0369
+  [A] C state_free h=5 seed=42 -> nll_test=3.9784  delta=-0.0290
+  [A] C state_cond h=10 seed=42 -> nll_test=3.9919  delta=-0.0155
+  [A] C state_free h=10 seed=42 -> nll_test=3.9907  delta=-0.0166
+  [A] WFC state_cond h=1 seed=42 -> nll_test=3.9751  delta=-0.0322
+  [A] WFC state_free h=1 seed=42 -> nll_test=3.9941  delta=-0.0133
+  [A] WFC state_cond h=2 seed=42 -> nll_test=3.9845  delta=-0.0228
+  [A] WFC state_free h=2 seed=42 -> nll_test=3.9956  delta=-0.0117
+  [A] WFC state_cond h=5 seed=42 -> nll_test=3.9924  delta=-0.0149
+  [A] WFC state_free h=5 seed=42 -> nll_test=3.9918  delta=-0.0155
+  [A] WFC state_cond h=10 seed=42 -> nll_test=3.9788  delta=-0.0286
+  [A] WFC state_free h=10 seed=42 -> nll_test=3.9875  delta=-0.0198
+  [A] GS state_cond h=1 seed=42 -> nll_test=4.0035  delta=-0.0038
+  [A] GS state_free h=1 seed=42 -> nll_test=4.0054  delta=-0.0019
+  [A] GS state_cond h=2 seed=42 -> nll_test=4.0274  delta=+0.0201
+  [A] GS state_free h=2 seed=42 -> nll_test=4.0344  delta=+0.0271
+  [A] GS state_cond h=5 seed=42 -> nll_test=4.0309  delta=+0.0235
+  [A] GS state_free h=5 seed=42 -> nll_test=4.0153  delta=+0.0080
+  [A] GS state_cond h=10 seed=42 -> nll_test=4.0073  delta=-0.0001
+  [A] GS state_free h=10 seed=42 -> nll_test=4.0064  delta=-0.0009
+  [A] MS state_cond h=1 seed=42 -> nll_test=3.9688  delta=-0.0386
+  [A] MS state_free h=1 seed=42 -> nll_test=3.9675  delta=-0.0399
+  [A] MS state_cond h=2 seed=42 -> nll_test=3.9903  delta=-0.0171
+  [A] MS state_free h=2 seed=42 -> nll_test=4.0017  delta=-0.0056
+  [A] MS state_cond h=5 seed=42 -> nll_test=4.0020  delta=-0.0054
+  [A] MS state_free h=5 seed=42 -> nll_test=3.9988  delta=-0.0086
+  [A] MS state_cond h=10 seed=42 -> nll_test=4.0015  delta=-0.0058
+  [A] MS state_free h=10 seed=42 -> nll_test=4.0037  delta=-0.0036
+  [A] PNC state_cond h=1 seed=42 -> nll_test=3.9814  delta=-0.0259
+  [A] PNC state_free h=1 seed=42 -> nll_test=3.9982  delta=-0.0092
+  [A] PNC state_cond h=2 seed=42 -> nll_test=4.0066  delta=-0.0008
+  [A] PNC state_free h=2 seed=42 -> nll_test=3.9992  delta=-0.0082
+  [A] PNC state_cond h=5 seed=42 -> nll_test=4.0194  delta=+0.0121
+  [A] PNC state_free h=5 seed=42 -> nll_test=3.9974  delta=-0.0099
+  [A] PNC state_cond h=10 seed=42 -> nll_test=3.9952  delta=-0.0122
+  [A] PNC state_free h=10 seed=42 -> nll_test=3.9981  delta=-0.0092
+  [A] USB state_cond h=1 seed=42 -> nll_test=4.0567  delta=+0.0493
+  [A] USB state_free h=1 seed=42 -> nll_test=4.0991  delta=+0.0918
+  [A] USB state_cond h=2 seed=42 -> nll_test=4.0704  delta=+0.0631
+  [A] USB state_free h=2 seed=42 -> nll_test=4.0528  delta=+0.0455
+  [A] USB state_cond h=5 seed=42 -> nll_test=4.0426  delta=+0.0352
+  [A] USB state_free h=5 seed=42 -> nll_test=4.0734  delta=+0.0660
+  [A] USB state_cond h=10 seed=42 -> nll_test=4.0976  delta=+0.0903
+  [A] USB state_free h=10 seed=42 -> nll_test=4.1132  delta=+0.1058
+  [A] FITB state_cond h=1 seed=42 -> nll_test=3.9610  delta=-0.0463
+  [A] FITB state_free h=1 seed=42 -> nll_test=3.9669  delta=-0.0404
+  [A] FITB state_cond h=2 seed=42 -> nll_test=3.9890  delta=-0.0184
+  [A] FITB state_free h=2 seed=42 -> nll_test=3.9797  delta=-0.0276
+  [A] FITB state_cond h=5 seed=42 -> nll_test=3.9853  delta=-0.0221
+  [A] FITB state_free h=5 seed=42 -> nll_test=4.0016  delta=-0.0058
+  [A] FITB state_cond h=10 seed=42 -> nll_test=4.0128  delta=+0.0055
+  [A] FITB state_free h=10 seed=42 -> nll_test=4.0174  delta=+0.0101
+  [A] MTB state_cond h=1 seed=42 -> nll_test=3.9501  delta=-0.0572
+  [A] MTB state_free h=1 seed=42 -> nll_test=3.9406  delta=-0.0667
+  [A] MTB state_cond h=2 seed=42 -> nll_test=3.9911  delta=-0.0162
+  [A] MTB state_free h=2 seed=42 -> nll_test=4.0182  delta=+0.0109
+  [A] MTB state_cond h=5 seed=42 -> nll_test=3.9897  delta=-0.0177
+  [A] MTB state_free h=5 seed=42 -> nll_test=3.9998  delta=-0.0075
+  [A] MTB state_cond h=10 seed=42 -> nll_test=3.9765  delta=-0.0309
+  [A] MTB state_free h=10 seed=42 -> nll_test=3.9901  delta=-0.0173
+  [A] BAC state_cond h=1 seed=42 -> nll_test=3.9946  delta=-0.0128
+  [A] BAC state_free h=1 seed=42 -> nll_test=3.9983  delta=-0.0090
+  [A] BAC state_cond h=2 seed=42 -> nll_test=4.0001  delta=-0.0072
+  [A] BAC state_free h=2 seed=42 -> nll_test=4.0002  delta=-0.0071
+  [A] BAC state_cond h=5 seed=42 -> nll_test=4.0000  delta=-0.0073
+  [A] BAC state_free h=5 seed=42 -> nll_test=4.0211  delta=+0.0137
+  [A] BAC state_cond h=10 seed=42 -> nll_test=4.0170  delta=+0.0096
+  [A] BAC state_free h=10 seed=42 -> nll_test=4.0006  delta=-0.0068
+
+============================================================
+EXPERIMENT B — Sigma sweep on JPM
+============================================================
+  sweep  JPM h=1 N=55 sigma=0.5 seed=42 -> nll_val=3.8383  nll_test=3.9594
+  sweep  JPM h=1 N=55 sigma=0.5 seed=7 -> nll_val=3.8419  nll_test=3.9712
+  sweep  JPM h=1 N=55 sigma=0.5 seed=123 -> nll_val=3.8397  nll_test=3.9442
+  sweep  JPM h=1 N=55 sigma=1.0 seed=42 -> nll_val=3.8360  nll_test=3.9549
+  sweep  JPM h=1 N=55 sigma=1.0 seed=7 -> nll_val=3.8349  nll_test=3.9523
+  sweep  JPM h=1 N=55 sigma=1.0 seed=123 -> nll_val=3.8350  nll_test=3.9369
+  sweep  JPM h=1 N=55 sigma=1.5 seed=42 -> nll_val=3.8365  nll_test=3.9544
+  sweep  JPM h=1 N=55 sigma=1.5 seed=7 -> nll_val=3.8358  nll_test=3.9483
+  sweep  JPM h=1 N=55 sigma=1.5 seed=123 -> nll_val=3.8339  nll_test=3.9369
+  sweep  JPM h=1 N=55 sigma=2.0 seed=42 -> nll_val=3.8381  nll_test=3.9507
+  sweep  JPM h=1 N=55 sigma=2.0 seed=7 -> nll_val=3.8367  nll_test=3.9486
+  sweep  JPM h=1 N=55 sigma=2.0 seed=123 -> nll_val=3.8337  nll_test=3.9375
+  sweep  JPM h=1 N=55 sigma=3.0 seed=42 -> nll_val=3.8383  nll_test=3.9569
+  sweep  JPM h=1 N=55 sigma=3.0 seed=7 -> nll_val=3.8385  nll_test=3.9497
+  sweep  JPM h=1 N=55 sigma=3.0 seed=123 -> nll_val=3.8344  nll_test=3.9406
+
+[sweep_sigma] Best sigma on JPM h=1 N=55: 1.0  (mean nll_val=3.8353)
+
+[B] BEST_SIGMA = 1.0
+
+============================================================
+EXPERIMENT C — SWA + best_sigma=1.0
+============================================================
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_cond h=1 seed=42 -> nll_test=3.9531  delta=-0.0542
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_free h=1 seed=42 -> nll_test=3.9501  delta=-0.0573
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_cond h=2 seed=42 -> nll_test=3.9683  delta=-0.0390
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_free h=2 seed=42 -> nll_test=3.9780  delta=-0.0293
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_cond h=5 seed=42 -> nll_test=3.9672  delta=-0.0402
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_free h=5 seed=42 -> nll_test=3.9774  delta=-0.0299
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_cond h=10 seed=42 -> nll_test=3.9883  delta=-0.0190
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] JPM state_free h=10 seed=42 -> nll_test=3.9783  delta=-0.0291
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_cond h=1 seed=42 -> nll_test=3.9735  delta=-0.0338
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_free h=1 seed=42 -> nll_test=3.9603  delta=-0.0470
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_cond h=2 seed=42 -> nll_test=3.9802  delta=-0.0272
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_free h=2 seed=42 -> nll_test=3.9765  delta=-0.0308
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_cond h=5 seed=42 -> nll_test=3.9603  delta=-0.0471
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_free h=5 seed=42 -> nll_test=3.9673  delta=-0.0400
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_cond h=10 seed=42 -> nll_test=4.0105  delta=+0.0031
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] C state_free h=10 seed=42 -> nll_test=4.0072  delta=-0.0002
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_cond h=1 seed=42 -> nll_test=3.9848  delta=-0.0225
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_free h=1 seed=42 -> nll_test=4.0049  delta=-0.0025
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_cond h=2 seed=42 -> nll_test=4.0072  delta=-0.0001
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_free h=2 seed=42 -> nll_test=3.9972  delta=-0.0101
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_cond h=5 seed=42 -> nll_test=3.9947  delta=-0.0126
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_free h=5 seed=42 -> nll_test=4.0079  delta=+0.0006
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_cond h=10 seed=42 -> nll_test=4.0089  delta=+0.0016
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] WFC state_free h=10 seed=42 -> nll_test=4.0168  delta=+0.0095
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_cond h=1 seed=42 -> nll_test=4.0350  delta=+0.0277
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_free h=1 seed=42 -> nll_test=4.0139  delta=+0.0066
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_cond h=2 seed=42 -> nll_test=4.0426  delta=+0.0352
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_free h=2 seed=42 -> nll_test=4.0481  delta=+0.0408
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_cond h=5 seed=42 -> nll_test=4.0457  delta=+0.0384
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_free h=5 seed=42 -> nll_test=4.0269  delta=+0.0196
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_cond h=10 seed=42 -> nll_test=4.0217  delta=+0.0143
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] GS state_free h=10 seed=42 -> nll_test=4.0147  delta=+0.0073
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_cond h=1 seed=42 -> nll_test=3.9743  delta=-0.0330
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_free h=1 seed=42 -> nll_test=3.9700  delta=-0.0374
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_cond h=2 seed=42 -> nll_test=4.0078  delta=+0.0005
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_free h=2 seed=42 -> nll_test=4.0069  delta=-0.0004
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_cond h=5 seed=42 -> nll_test=4.0292  delta=+0.0219
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_free h=5 seed=42 -> nll_test=4.0037  delta=-0.0037
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_cond h=10 seed=42 -> nll_test=4.0009  delta=-0.0064
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MS state_free h=10 seed=42 -> nll_test=3.9954  delta=-0.0120
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_cond h=1 seed=42 -> nll_test=3.9889  delta=-0.0184
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_free h=1 seed=42 -> nll_test=3.9884  delta=-0.0189
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_cond h=2 seed=42 -> nll_test=4.0160  delta=+0.0087
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_free h=2 seed=42 -> nll_test=4.0133  delta=+0.0060
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_cond h=5 seed=42 -> nll_test=4.0210  delta=+0.0137
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_free h=5 seed=42 -> nll_test=4.0083  delta=+0.0010
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_cond h=10 seed=42 -> nll_test=4.0384  delta=+0.0310
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] PNC state_free h=10 seed=42 -> nll_test=4.0423  delta=+0.0350
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_cond h=1 seed=42 -> nll_test=4.1000  delta=+0.0927
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_free h=1 seed=42 -> nll_test=4.1138  delta=+0.1064
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_cond h=2 seed=42 -> nll_test=4.1090  delta=+0.1017
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_free h=2 seed=42 -> nll_test=4.1000  delta=+0.0927
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_cond h=5 seed=42 -> nll_test=4.0842  delta=+0.0769
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_free h=5 seed=42 -> nll_test=4.0889  delta=+0.0816
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_cond h=10 seed=42 -> nll_test=4.1841  delta=+0.1768
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] USB state_free h=10 seed=42 -> nll_test=4.1571  delta=+0.1498
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_cond h=1 seed=42 -> nll_test=3.9637  delta=-0.0437
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_free h=1 seed=42 -> nll_test=3.9641  delta=-0.0432
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_cond h=2 seed=42 -> nll_test=4.0008  delta=-0.0065
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_free h=2 seed=42 -> nll_test=3.9885  delta=-0.0189
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_cond h=5 seed=42 -> nll_test=3.9973  delta=-0.0100
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_free h=5 seed=42 -> nll_test=3.9998  delta=-0.0075
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_cond h=10 seed=42 -> nll_test=4.0325  delta=+0.0252
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] FITB state_free h=10 seed=42 -> nll_test=4.0446  delta=+0.0373
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_cond h=1 seed=42 -> nll_test=3.9498  delta=-0.0575
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_free h=1 seed=42 -> nll_test=3.9416  delta=-0.0657
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_cond h=2 seed=42 -> nll_test=3.9793  delta=-0.0280
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_free h=2 seed=42 -> nll_test=3.9900  delta=-0.0174
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_cond h=5 seed=42 -> nll_test=4.0150  delta=+0.0077
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_free h=5 seed=42 -> nll_test=4.0227  delta=+0.0154
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_cond h=10 seed=42 -> nll_test=4.0317  delta=+0.0243
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] MTB state_free h=10 seed=42 -> nll_test=4.0487  delta=+0.0414
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_cond h=1 seed=42 -> nll_test=4.0013  delta=-0.0060
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_free h=1 seed=42 -> nll_test=4.0097  delta=+0.0023
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_cond h=2 seed=42 -> nll_test=4.0041  delta=-0.0033
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_free h=2 seed=42 -> nll_test=4.0158  delta=+0.0085
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_cond h=5 seed=42 -> nll_test=4.0031  delta=-0.0042
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_free h=5 seed=42 -> nll_test=4.0150  delta=+0.0077
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_cond h=10 seed=42 -> nll_test=4.0470  delta=+0.0397
+[SWA] Averaged 10 checkpoints
+  [C_s1.0] BAC state_free h=10 seed=42 -> nll_test=4.0358  delta=+0.0285
+
+============================================================
+EXPERIMENT D — Higher-order k ablation (JPM)
+============================================================
+[SWA] Averaged 10 checkpoints
+  [D] k=1 seed=42 -> nll_test=3.9531  delta=-0.0542
+[SWA] Averaged 10 checkpoints
+  [D] k=1 seed=7 -> nll_test=3.9514  delta=-0.0560
+[SWA] Averaged 10 checkpoints
+  [D] k=1 seed=123 -> nll_test=3.9507  delta=-0.0566
+[SWA] Averaged 10 checkpoints
+  [D] k=2 seed=42 -> nll_test=3.9561  delta=-0.0513
+[SWA] Averaged 10 checkpoints
+  [D] k=2 seed=7 -> nll_test=3.9593  delta=-0.0481
+[SWA] Averaged 10 checkpoints
+  [D] k=2 seed=123 -> nll_test=3.9569  delta=-0.0504
+[SWA] Averaged 10 checkpoints
+  [D] k=3 seed=42 -> nll_test=3.9556  delta=-0.0517
+[SWA] Averaged 10 checkpoints
+  [D] k=3 seed=7 -> nll_test=3.9620  delta=-0.0453
+[SWA] Averaged 10 checkpoints
+  [D] k=3 seed=123 -> nll_test=3.9523  delta=-0.0550
+[SWA] Averaged 10 checkpoints
+  [D] k=5 seed=42 -> nll_test=3.9699  delta=-0.0374
+[SWA] Averaged 10 checkpoints
+  [D] k=5 seed=7 -> nll_test=3.9626  delta=-0.0447
+[SWA] Averaged 10 checkpoints
+  [D] k=5 seed=123 -> nll_test=3.9704  delta=-0.0369
+
+============================================================
+EXPERIMENT E — Conditioning regime (JPM)
+============================================================
+
+  regime=own_only  n_feat=6
+[SWA] Averaged 10 checkpoints
+  [E] regime=own_only seed=42 -> nll_test=3.9641  delta=-0.0433
+[SWA] Averaged 10 checkpoints
+  [E] regime=own_only seed=7 -> nll_test=3.9588  delta=-0.0485
+[SWA] Averaged 10 checkpoints
+  [E] regime=own_only seed=123 -> nll_test=3.9660  delta=-0.0414
+
+  regime=macro_only  n_feat=6
+[SWA] Averaged 10 checkpoints
+  [E] regime=macro_only seed=42 -> nll_test=3.9481  delta=-0.0592
+[SWA] Averaged 10 checkpoints
+  [E] regime=macro_only seed=7 -> nll_test=3.9488  delta=-0.0585
+[SWA] Averaged 10 checkpoints
+  [E] regime=macro_only seed=123 -> nll_test=3.9461  delta=-0.0612
+
+  regime=full  n_feat=67
+[SWA] Averaged 10 checkpoints
+  [E] regime=full seed=42 -> nll_test=3.9531  delta=-0.0542
+[SWA] Averaged 10 checkpoints
+  [E] regime=full seed=7 -> nll_test=3.9514  delta=-0.0560
+[SWA] Averaged 10 checkpoints
+  [E] regime=full seed=123 -> nll_test=3.9507  delta=-0.0566
+
+============================================================
+Writing summary.md
+============================================================
+  Written: results_multiasset\summary.md
+
+All experiments complete.
