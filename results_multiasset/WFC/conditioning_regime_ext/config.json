@@ -1,0 +1,16 @@
+{
+  "sigma": 1.0,
+  "use_swa": true,
+  "swa_epochs": 10,
+  "regimes": [
+    "full",
+    "macro_only",
+    "own_only",
+    "other_banks_only"
+  ],
+  "horizons": [
+    1,
+    21
+  ],
+  "N": 55
+}
