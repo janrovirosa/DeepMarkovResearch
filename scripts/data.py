@@ -238,3 +238,46 @@ def build_feature_subset(
     raise ValueError(
         f"Unknown regime {regime!r}; choose from 'full', 'macro_only', 'own_only', 'other_banks_only'"
     )
+
+
+# ---------------------------------------------------------------------------
+# Volatility-state binning
+# ---------------------------------------------------------------------------
+
+def compute_X_t_vol(
+    prices: np.ndarray,
+    vol_window: int,
+    n_bins: int,
+    train_end: int,
+) -> Tuple[np.ndarray, np.ndarray, int, np.ndarray, int]:
+    """Compute rolling-volatility bin state X_t_vol, dropping NaN warmup rows.
+
+    sigma_t = std(r_{t-vol_window+1}, ..., r_t)  (vol_window daily log-returns)
+
+    The first vol_window-1 entries lack sufficient history and are DROPPED
+    (not forward-filled) to avoid lookahead bias.  Returned arrays have
+    length len(prices) - vol_window.
+
+    Bin edges are fit on training data only (train_end indexes into the
+    returned truncated arrays, i.e. sigma_valid[:train_end] is used).
+
+    Returns
+    -------
+    X_t_vol   : (len(prices) - vol_window,)  bin assignments in [0, N_XT-1]
+    sigma_t   : (len(prices) - vol_window,)  raw volatility values (unstandardised)
+    N_XT      : int  actual bin count (≤ n_bins; may be reduced by get_edges)
+    edges_vol : (N_XT+1,)  quantile edges with ±inf boundaries
+    warmup    : int  rows dropped from start (= vol_window - 1)
+    """
+    from .bins import get_edges, assign_bins  # deferred to avoid circular import
+
+    warmup = vol_window - 1
+    r = compute_returns(prices, 1)                                  # (T-1,)
+    sigma_raw = pd.Series(r).rolling(vol_window).std(ddof=1).values # (T-1,) with warmup NaNs
+    sigma_valid = sigma_raw[warmup:]                                # (T - vol_window,)
+    assert np.isnan(sigma_valid).sum() == 0, (
+        f"compute_X_t_vol: unexpected NaN after dropping {warmup} warmup rows"
+    )
+    N_XT, edges_vol = get_edges(sigma_valid[:train_end], n_bins)
+    X_t_vol = assign_bins(sigma_valid, edges_vol)
+    return X_t_vol, sigma_valid, N_XT, edges_vol, warmup
