@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Extended multi-asset experiment runner (A-EXT through F-NEW).
 
 Does NOT modify or replace run_multiasset_experiments.py (Experiments A-E).
@@ -6,16 +6,16 @@ Writes to *_ext experiment subdirectories inside results_multiasset/.
 
 Experiments
 -----------
-A-EXT  Full factorial baseline: 10 tickers × 5h × 5N × 2 models × 3 seeds
-B-EXT  Sigma sweep: JPM × h∈{1,21} × 5σ × 3 seeds
+A-EXT  Full factorial baseline: 10 tickers Ã— 5h Ã— 5N Ã— 2 models Ã— 3 seeds
+B-EXT  Sigma sweep: JPM Ã— hâˆˆ{1,21} Ã— 5Ïƒ Ã— 3 seeds
 C-EXT  SWA + best sigma: same grid as A-EXT
-D-EXT  Higher-order k: JPM × 5k × 4h × N=55 × 3 seeds
-E-EXT  Conditioning regime: 10 tickers × 4 regimes × h∈{1,21} × N=55 × 3 seeds
+D-EXT  Higher-order k: JPM Ã— 5k Ã— 4h Ã— N=55 Ã— 3 seeds
+E-EXT  Conditioning regime: 10 tickers Ã— 4 regimes Ã— hâˆˆ{1,21} Ã— N=55 Ã— 3 seeds
 F-NEW  Cross-asset synchrony: post-hoc from C-EXT weights, no training
 
 Entry points
 ------------
-  run_all_experiments_ext(cfg)  — importable callable for notebook use
+  run_all_experiments_ext(cfg)  â€” importable callable for notebook use
 """
 from __future__ import annotations
 
@@ -114,7 +114,7 @@ def _cache_path_ext(
 
 
 def setup_ticker_ext(ticker: str, cfg: ExperimentConfig) -> Dict:
-    """Load ticker data for extended grid (HORIZONS_EXT × BINS_EXT)."""
+    """Load ticker data for extended grid (HORIZONS_EXT Ã— BINS_EXT)."""
     prices, F_raw, feature_cols = load_master_dataset(ticker=ticker)
     F_normed = F_raw  # already standardised
 
@@ -250,7 +250,7 @@ def _ck_post_pass(
     sigma: float,
     use_swa: bool,
     cfg: ExperimentConfig,
-    a_t_cache: Dict,    # {(model_type, h, seed): A_t_series} — operator series computed during training
+    a_t_cache: Dict,    # {(model_type, h, seed): A_t_series} â€” operator series computed during training
 ) -> int:
     """Compute CK time series for all h > 1 using cached h=1 operators.
 
@@ -273,7 +273,7 @@ def _ck_post_pass(
                 cp_h1 = _cache_path_ext(exp_prefix, ticker, model_type, 1, N, seed)
                 if not is_cached(cp_h1):
                     print(f"  WARNING: CK deferred for ({ticker}, {model_type}, "
-                          f"N={N}, seed={seed}) — h=1 model not cached")
+                          f"N={N}, seed={seed}) â€” h=1 model not cached")
                     for h in HORIZONS_EXT:
                         if h > 1:
                             deferred += 1
@@ -297,7 +297,7 @@ def _ck_post_pass(
                         cp_h = _cache_path_ext(exp_prefix, ticker, model_type, h, N, seed)
                         if not is_cached(cp_h):
                             print(f"  WARNING: CK deferred for ({ticker}, {model_type}, "
-                                  f"h={h}, N={N}, seed={seed}) — h={h} model not cached")
+                                  f"h={h}, N={N}, seed={seed}) â€” h={h} model not cached")
                             deferred += 1
                             continue
                         model_h = _build_model(model_type, n_feat, N_XT, cfg_h["N_actual"])
@@ -394,7 +394,7 @@ def run_one_ext(
     delta     = nll_test - _marginal_nll(N_actual)
 
     print(f"  [{exp_prefix}] {ticker} {model_type:12s} h={h:2d} N={N:2d} seed={seed} "
-          f"nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+          f"nll_test={nll_test:.4f}  Î”={delta:+.4f}")
 
     # Operator diagnostics time series (always)
     A_t = _save_operator_ts(
@@ -416,12 +416,12 @@ def run_one_ext(
 
 
 # ---------------------------------------------------------------------------
-# Experiment A-EXT — Full factorial baseline
+# Experiment A-EXT â€” Full factorial baseline
 # ---------------------------------------------------------------------------
 
 def run_experiment_A_ext(cfg: ExperimentConfig):
     print("\n" + "=" * 60)
-    print("EXPERIMENT A-EXT — Full factorial baseline")
+    print("EXPERIMENT A-EXT â€” Full factorial baseline")
     print("=" * 60)
 
     total_deferred = 0
@@ -438,10 +438,10 @@ def run_experiment_A_ext(cfg: ExperimentConfig):
 
         for N in BINS_EXT:
             all_rows: List[Dict] = []
-            # {(model_type, h, seed): A_t_series} — for CK post-pass
+            # {(model_type, h, seed): A_t_series} â€” for CK post-pass
             a_t_cache: Dict[Tuple, np.ndarray] = {}
 
-            for h in HORIZONS_EXT:          # h=1 FIRST → populates cache for CK
+            for h in HORIZONS_EXT:          # h=1 FIRST â†’ populates cache for CK
                 for model_type in ["state_cond", "state_free"]:
                     for seed in cfg.seeds:
                         try:
@@ -484,12 +484,12 @@ def run_experiment_A_ext(cfg: ExperimentConfig):
 
 
 # ---------------------------------------------------------------------------
-# Experiment B-EXT — Sigma sweep (JPM, h∈{1,21})
+# Experiment B-EXT â€” Sigma sweep (JPM, hâˆˆ{1,21})
 # ---------------------------------------------------------------------------
 
 def run_experiment_B_ext(cfg: ExperimentConfig) -> float:
     print("\n" + "=" * 60)
-    print("EXPERIMENT B-EXT — Sigma sweep on JPM (h=1 and h=21)")
+    print("EXPERIMENT B-EXT â€” Sigma sweep on JPM (h=1 and h=21)")
     print("=" * 60)
 
     sweep_cache = CACHE_DIR / "sweep_sigma_ext"
@@ -525,12 +525,12 @@ def run_experiment_B_ext(cfg: ExperimentConfig) -> float:
 
 
 # ---------------------------------------------------------------------------
-# Experiment C-EXT — SWA + best sigma, full factorial
+# Experiment C-EXT â€” SWA + best sigma, full factorial
 # ---------------------------------------------------------------------------
 
 def run_experiment_C_ext(cfg: ExperimentConfig, best_sigma: float):
     print("\n" + "=" * 60)
-    print(f"EXPERIMENT C-EXT — SWA + best_sigma={best_sigma}, full factorial")
+    print(f"EXPERIMENT C-EXT â€” SWA + best_sigma={best_sigma}, full factorial")
     print("=" * 60)
 
     total_deferred = 0
@@ -592,12 +592,12 @@ def run_experiment_C_ext(cfg: ExperimentConfig, best_sigma: float):
 
 
 # ---------------------------------------------------------------------------
-# Experiment D-EXT — Higher-order k, full horizon sweep (JPM only)
+# Experiment D-EXT â€” Higher-order k, full horizon sweep (JPM only)
 # ---------------------------------------------------------------------------
 
 def run_experiment_D_ext(cfg: ExperimentConfig, best_sigma: float):
     print("\n" + "=" * 60)
-    print("EXPERIMENT D-EXT — Higher-order k ablation (JPM, N=55)")
+    print("EXPERIMENT D-EXT â€” Higher-order k ablation (JPM, N=55)")
     print("=" * 60)
 
     ticker = "JPM"
@@ -656,9 +656,9 @@ def run_experiment_D_ext(cfg: ExperimentConfig, best_sigma: float):
                     delta = nll_test - _marginal_nll(N_actual)
 
                     print(f"  [D-EXT] k={k} h={h} seed={seed} "
-                          f"nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+                          f"nll_test={nll_test:.4f}  Î”={delta:+.4f}")
 
-                    # Operator diagnostics — HigherOrderStateConditionedNet has same
+                    # Operator diagnostics â€” HigherOrderStateConditionedNet has same
                     # forward(F, x_t) interface as StateConditionedNet (k=1 is identical)
                     A_t = build_A_t_series(
                         model, F_normed, cfg_dict["idx_test"],
@@ -721,12 +721,12 @@ def run_experiment_D_ext(cfg: ExperimentConfig, best_sigma: float):
 
 
 # ---------------------------------------------------------------------------
-# Experiment E-EXT — Conditioning regime, all stocks, h∈{1,21}
+# Experiment E-EXT â€” Conditioning regime, all stocks, hâˆˆ{1,21}
 # ---------------------------------------------------------------------------
 
 def run_experiment_E_ext(cfg: ExperimentConfig, best_sigma: float):
     print("\n" + "=" * 60)
-    print("EXPERIMENT E-EXT — Conditioning regime (all tickers, h∈{1,21})")
+    print("EXPERIMENT E-EXT â€” Conditioning regime (all tickers, hâˆˆ{1,21})")
     print("=" * 60)
 
     N = 55
@@ -801,7 +801,7 @@ def run_experiment_E_ext(cfg: ExperimentConfig, best_sigma: float):
                         delta = nll_test - _marginal_nll(N_actual)
 
                         print(f"  [E-EXT] {ticker} {regime:20s} h={h} seed={seed} "
-                              f"nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+                              f"nll_test={nll_test:.4f}  Î”={delta:+.4f}")
 
                         # Operator diagnostics (using regime features)
                         A_t = build_A_t_series(
@@ -872,12 +872,12 @@ def run_experiment_E_ext(cfg: ExperimentConfig, best_sigma: float):
 
 
 # ---------------------------------------------------------------------------
-# Experiment F-NEW — Cross-asset synchrony (post-hoc, no training)
+# Experiment F-NEW â€” Cross-asset synchrony (post-hoc, no training)
 # ---------------------------------------------------------------------------
 
 def run_experiment_F_new(cfg: ExperimentConfig, best_sigma: float):
     print("\n" + "=" * 60)
-    print("EXPERIMENT F-NEW — Cross-asset synchrony (post-hoc)")
+    print("EXPERIMENT F-NEW â€” Cross-asset synchrony (post-hoc)")
     print("=" * 60)
 
     N = 55
@@ -908,7 +908,7 @@ def run_experiment_F_new(cfg: ExperimentConfig, best_sigma: float):
                 cp_h5 = _cache_path_ext(f"Cext_s{best_sigma}", ticker, "state_cond", h_ck, N, seed)
                 if not is_cached(cp_h1):
                     print(f"  [F-NEW] WARNING: C-EXT h=1 N=55 state_cond cache missing "
-                          f"for {ticker} seed={seed} — skipping seed")
+                          f"for {ticker} seed={seed} â€” skipping seed")
                     continue
                 model_h1 = StateConditionedNet(n_feat, N_XT, N_actual)
                 model_h1 = load_cached_model(model_h1, cp_h1).to(DEVICE)
@@ -931,7 +931,7 @@ def run_experiment_F_new(cfg: ExperimentConfig, best_sigma: float):
                 traceback.print_exc()
 
         if not h1_At_list:
-            print(f"  [F-NEW] WARNING: no models loaded for {ticker} — skipping")
+            print(f"  [F-NEW] WARNING: no models loaded for {ticker} â€” skipping")
             continue
 
         # Average operator diagnostics over seeds
@@ -1006,15 +1006,17 @@ def write_summary_ext(best_sigma: float):
                 df["exp_tag"] = exp_tag
                 frames.append(df)
         if frames:
-            df_all = pd.concat(frames)
+            df_all = pd.concat(frames).reset_index(drop=True)
             df_valid = df_all.dropna(subset=["delta_marginal"])
             if not df_valid.empty:
-                best_idx = df_valid["delta_marginal"].idxmin()
-                br = df_valid.loc[best_idx]
+                br = df_valid.loc[df_valid["delta_marginal"].idxmin()]
+                # ensure scalar (guard against duplicate index returning DataFrame)
+                if isinstance(br, pd.DataFrame):
+                    br = br.iloc[0]
                 best_rows.append({
                     "ticker": ticker,
                     "exp_tag": br.get("exp_tag", ""),
-                    "model":   br.get("model", ""),
+                    "model":   str(br.get("model", "")),
                     "h":       br.get("h", ""),
                     "N":       br.get("N", ""),
                     "delta_marginal": br.get("delta_marginal", ""),
@@ -1026,7 +1028,7 @@ def write_summary_ext(best_sigma: float):
     lines.append("\n")
 
     # Pooled delta_marginal by horizon and by N
-    lines.append("## Pooled delta_marginal (mean±std across 10 stocks)\n")
+    lines.append("## Pooled delta_marginal (meanÂ±std across 10 stocks)\n")
     all_c_ext = []
     for ticker in TICKERS:
         p = RESULTS_DIR / ticker / "swa_bestsigma_ext" / "nll_metrics.csv"
@@ -1092,13 +1094,13 @@ def write_summary_ext(best_sigma: float):
 # ---------------------------------------------------------------------------
 
 def run_all_experiments_ext(cfg: ExperimentConfig):
-    """Run the extended multi-asset experiment suite (A-EXT → F-NEW).
+    """Run the extended multi-asset experiment suite (A-EXT â†’ F-NEW).
 
     Parameters
     ----------
     cfg : ExperimentConfig
         Controls seeds, swa_epochs, sigma_anchor, max_epochs, patience.
-        horizons and n_bins_list from cfg are ignored — HORIZONS_EXT and
+        horizons and n_bins_list from cfg are ignored â€” HORIZONS_EXT and
         BINS_EXT are used instead.
     """
     print(f"\nResults directory: {RESULTS_DIR.resolve()}")
