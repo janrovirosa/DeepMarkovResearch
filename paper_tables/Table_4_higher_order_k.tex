@@ -1,0 +1,35 @@
+\documentclass{article}
+\usepackage{booktabs}
+\begin{document}
+\begin{table}[ht]
+\centering
+\caption{Higher-order Markov ablation (JPM, N=55)}
+\label{tab:higher-order}
+\begin{tabular}{lrrr}
+\toprule
+k & h & nll_test & delta_marginal \\
+\midrule
+1.0000 & 1.0000 & 3.9517 & -0.0556 \\
+1.0000 & 5.0000 & 3.9768 & -0.0306 \\
+1.0000 & 21.0000 & 4.0026 & -0.0048 \\
+1.0000 & 63.0000 & 4.0800 & 0.0726 \\
+2.0000 & 1.0000 & nan & nan \\
+2.0000 & 5.0000 & nan & nan \\
+2.0000 & 21.0000 & nan & nan \\
+2.0000 & 63.0000 & nan & nan \\
+3.0000 & 1.0000 & nan & nan \\
+3.0000 & 5.0000 & nan & nan \\
+3.0000 & 21.0000 & nan & nan \\
+3.0000 & 63.0000 & nan & nan \\
+5.0000 & 1.0000 & nan & nan \\
+5.0000 & 5.0000 & nan & nan \\
+5.0000 & 21.0000 & nan & nan \\
+5.0000 & 63.0000 & nan & nan \\
+10.0000 & 1.0000 & nan & nan \\
+10.0000 & 5.0000 & nan & nan \\
+10.0000 & 21.0000 & nan & nan \\
+10.0000 & 63.0000 & nan & nan \\
+\bottomrule
+\end{tabular}
+\end{table}
+\end{document}
