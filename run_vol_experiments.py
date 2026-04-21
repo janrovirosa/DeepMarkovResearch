@@ -1,34 +1,34 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """Volatility-state conditioning experiment runner.
 
-Tests whether conditioning on realized-volatility bin state (σ_t) is more
+Tests whether conditioning on realized-volatility bin state (Ïƒ_t) is more
 predictive than return-bin state (X_t) for forward return distributions.
 
 Model variants
 --------------
-  state_free          — StateFreeNet,          F=full,  X_t unused
-  state_cond_return   — StateConditionedNet,   F=full,  X_t=return-bin
-  state_cond_vol_w5   — StateConditionedNet,   F=full,  X_t=vol-bin(w=5)
-  state_cond_vol_w10  — StateConditionedNet,   F=full,  X_t=vol-bin(w=10)
-  state_cond_vol_w21  — StateConditionedNet,   F=full,  X_t=vol-bin(w=21)
-  state_cond_macro    — StateConditionedNet,   F=macro, X_t=return-bin
+  state_free          â€” StateFreeNet,          F=full,  X_t unused
+  state_cond_return   â€” StateConditionedNet,   F=full,  X_t=return-bin
+  state_cond_vol_w5   â€” StateConditionedNet,   F=full,  X_t=vol-bin(w=5)
+  state_cond_vol_w10  â€” StateConditionedNet,   F=full,  X_t=vol-bin(w=10)
+  state_cond_vol_w21  â€” StateConditionedNet,   F=full,  X_t=vol-bin(w=21)
+  state_cond_macro    â€” StateConditionedNet,   F=macro, X_t=return-bin
 
 Warmup alignment
 ----------------
 All models are trained on the SAME date range.  The maximum vol warmup
-(vol_window=21 → warmup=20) is applied to every array before any model sees
+(vol_window=21 â†’ warmup=20) is applied to every array before any model sees
 data, so NLL comparisons are apples-to-apples.
 
 CK non-square note
 ------------------
-For N∈{35,45} (N ≠ N_XT=55), the operator is non-square and CK composition
+For Nâˆˆ{35,45} (N â‰  N_XT=55), the operator is non-square and CK composition
 is undefined.  Those CSVs contain NaN values and a ck_unavailable_reason
 column.  Figures notebooks must render a visible "(N/A: non-square)" label
 rather than silently dropping those rows.
 
 Entry point
 -----------
-  run_vol_experiments(cfg)   — importable callable for notebook use
+  run_vol_experiments(cfg)   â€” importable callable for notebook use
 """
 from __future__ import annotations
 
@@ -148,7 +148,7 @@ def setup_ticker_vol(ticker: str, cfg: ExperimentConfig) -> Dict:
     # F_raw is already standardised for multi-asset; keep as-is
     F_normed_raw = F_raw
 
-    # ── Compute vol states on FULL price series before truncation ──────────
+    # â”€â”€ Compute vol states on FULL price series before truncation â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     # We need a representative train_end to fit vol bin edges.  Use the h=1
     # split on the full series as a proxy; vol edges are only used for state
     # assignment, not for label construction.
@@ -169,7 +169,7 @@ def setup_ticker_vol(ticker: str, cfg: ExperimentConfig) -> Dict:
         X_t_vols_raw[w] = X_t_vol_w   # length T_full - w
         sigma_ts_raw[w] = sigma_w
 
-    # ── Apply uniform warmup truncation (WARMUP_MAX = 20) to all arrays ────
+    # â”€â”€ Apply uniform warmup truncation (WARMUP_MAX = 20) to all arrays â”€â”€â”€â”€
     # After truncation:
     #   prices_eff  has length T_full - WARMUP_MAX
     #   F_normed_eff has length T_full - WARMUP_MAX
@@ -195,15 +195,15 @@ def setup_ticker_vol(ticker: str, cfg: ExperimentConfig) -> Dict:
     X_t_vols_eff: Dict[int, np.ndarray] = {}
     sigma_ts_eff: Dict[int, np.ndarray] = {}
     for w in VOL_WINDOWS:
-        extra_trim = WARMUP_MAX - (w - 1)   # ≥ 0 by construction (WARMUP_MAX = max warmup)
+        extra_trim = WARMUP_MAX - (w - 1)   # â‰¥ 0 by construction (WARMUP_MAX = max warmup)
         X_t_vols_eff[w] = X_t_vols_raw[w][extra_trim:]
         sigma_ts_eff[w]  = sigma_ts_raw[w][extra_trim:]
         assert len(X_t_vols_eff[w]) == len(X_t_return_eff), (
             f"{ticker} w={w}: vol array length {len(X_t_vols_eff[w])} "
-            f"≠ return array length {len(X_t_return_eff)}"
+            f"â‰  return array length {len(X_t_return_eff)}"
         )
 
-    # ── Build bin configs on effective dataset ─────────────────────────────
+    # â”€â”€ Build bin configs on effective dataset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     configs = build_all_configs(
         prices_eff, F_normed_eff, X_t_return_eff,
         horizons=HORIZONS_VOL,
@@ -214,12 +214,12 @@ def setup_ticker_vol(ticker: str, cfg: ExperimentConfig) -> Dict:
         sigma_anchor=cfg.sigma_anchor,
     )
 
-    # ── Macro feature subset ───────────────────────────────────────────────
+    # â”€â”€ Macro feature subset â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     F_macro, macro_cols = build_feature_subset(
         F_normed_eff, feature_cols, "macro_only"
     )
 
-    # ── Save vol state time series CSV ────────────────────────────────────
+    # â”€â”€ Save vol state time series CSV â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     prices_csv = (
         Path(__file__).resolve().parent / "dataset_multiasset" / f"prices_{ticker}.csv"
     )
@@ -296,7 +296,7 @@ def _save_ck_ts_vol(
             "ck_kl":    np.full(T_ck, np.nan),
             "ck_tv":    np.full(T_ck, np.nan),
             "ck_unavailable_reason": (
-                f"N_out={N} ≠ N_XT=55 (non-square operator; CK composition undefined)"
+                f"N_out={N} â‰  N_XT=55 (non-square operator; CK composition undefined)"
             ),
         })
     else:
@@ -353,7 +353,7 @@ def _ck_post_pass_vol(
             cp_h1 = _cache_path(ticker, model_name, 1, N, seed)
             if not is_cached(cp_h1):
                 print(f"  WARNING: CK deferred ({ticker}, {model_name}, N={N}, "
-                      f"seed={seed}) — h=1 model not cached")
+                      f"seed={seed}) â€” h=1 model not cached")
                 deferred += len([h for h in HORIZONS_VOL if h > 1])
                 continue
             cfg_h1 = td["configs"][(1, N)]
@@ -373,7 +373,7 @@ def _ck_post_pass_vol(
                     cp_h = _cache_path(ticker, model_name, h, N, seed)
                     if not is_cached(cp_h):
                         print(f"  WARNING: CK deferred ({ticker}, {model_name}, "
-                              f"h={h}, N={N}, seed={seed}) — h={h} model not cached")
+                              f"h={h}, N={N}, seed={seed}) â€” h={h} model not cached")
                         deferred += 1
                         continue
                     m_h = _build_model(model_name, n_feat, N_XT, cfg_h["N_actual"]).to(DEVICE)
@@ -482,7 +482,7 @@ def run_one_vol(
 
     w = _vol_window_for_model(model_name)
     print(f"  [VOL] {ticker} {model_name:22s} h={h:2d} N={N:2d} seed={seed} "
-          f"nll_test={nll_test:.4f}  Δ={delta:+.4f}")
+          f"nll_test={nll_test:.4f}  Î”={delta:+.4f}")
 
     A_t = _save_operator_ts_vol(
         model, F_matrix, cfg_dict["idx_test"],
@@ -527,7 +527,7 @@ def run_vol_experiments(cfg: ExperimentConfig) -> None:
     total_deferred = 0
 
     for ticker in TICKERS:
-        print(f"\n{'─'*60}\n  Ticker: {ticker}\n{'─'*60}")
+        print(f"\n{'â”€'*60}\n  Ticker: {ticker}\n{'â”€'*60}")
         try:
             td = setup_ticker_vol(ticker, cfg)
         except Exception:
@@ -539,7 +539,7 @@ def run_vol_experiments(cfg: ExperimentConfig) -> None:
             all_rows: List[Dict] = []
             a_t_cache: Dict[Tuple, np.ndarray] = {}
 
-            for h in HORIZONS_VOL:      # h=1 FIRST — needed by CK post-pass
+            for h in HORIZONS_VOL:      # h=1 FIRST â€” needed by CK post-pass
                 for model_name in MODELS:
                     for seed in cfg.seeds:
                         try:
@@ -673,3 +673,4 @@ def write_summary_vol() -> None:
 if __name__ == "__main__":
     cfg = make_config()
     run_vol_experiments(cfg)
+
