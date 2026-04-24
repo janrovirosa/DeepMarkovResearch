@@ -163,14 +163,13 @@ def plot_ck_time_series(
     out_dir: str | Path,
     regime_windows: Optional[List[Tuple]] = None,
 ) -> plt.Figure:
-    """Line plot of CK KL error over test period for each model × horizon."""
+    """One taller figure per horizon of CK KL error over the test period."""
     _set_style()
-    fig, axes = plt.subplots(2, 2, figsize=(14, 8), sharex=False)
-    axes = axes.flatten()
     horizons = sorted(set(h for (_, h) in ck_time_dict.keys()))
+    last_fig = None
 
-    for ax_idx, h in enumerate(horizons[:4]):
-        ax = axes[ax_idx]
+    for h in horizons:
+        fig, ax = plt.subplots(figsize=(9, 6))   # taller relative to width
         for (model, mh), series in ck_time_dict.items():
             if mh != h:
                 continue
@@ -181,18 +180,39 @@ def plot_ck_time_series(
         if regime_windows:
             for (start, end, name) in regime_windows:
                 ax.axvspan(start, end, alpha=0.15, color="red", label=name)
-        ax.set_title(f"CK KL Error over Time  (h={h})")
-        ax.set_xlabel("Test time index")
-        ax.set_ylabel("Mean KL per time step")
+        ax.set_title(f"Time-Resolved CK KL Discrepancy (h={h}) — Test Period")
+        ax.set_xlabel("Test time index t")
+        ax.set_ylabel("KL discrepancy per timestep")
         ax.legend(fontsize=8)
+        fig.tight_layout()
+        save_fig(fig, Path(out_dir) / f"ck_error_time_series_h{h}")
+        last_fig = fig
 
-    for ax in axes[len(horizons):]:
+    # Also save a combined 2-column grid for backward compat
+    n = len(horizons)
+    ncols = min(2, n)
+    nrows = (n + ncols - 1) // ncols
+    fig_all, axes_all = plt.subplots(nrows, ncols, figsize=(ncols * 9, nrows * 6), sharex=False)
+    axes_flat = np.array(axes_all).flatten()
+    for ax_idx, h in enumerate(horizons):
+        ax = axes_flat[ax_idx]
+        for (model, mh), series in ck_time_dict.items():
+            if mh != h:
+                continue
+            label = model + (" (degenerate rows)" if "state_free" in model else "")
+            ax.plot(series, label=label, alpha=0.8)
+        if regime_windows:
+            for (start, end, name) in regime_windows:
+                ax.axvspan(start, end, alpha=0.15, color="red", label=name)
+        ax.set_title(f"h={h}")
+        ax.set_xlabel("Test time index t")
+        ax.set_ylabel("KL discrepancy per timestep")
+        ax.legend(fontsize=8)
+    for ax in axes_flat[n:]:
         ax.set_visible(False)
-
-    fig.suptitle("Time-Inhomogeneous CK Error over Test Period", fontsize=13)
-    fig.tight_layout()
-    save_fig(fig, Path(out_dir) / "ck_error_time_series")
-    return fig
+    fig_all.tight_layout()
+    save_fig(fig_all, Path(out_dir) / "ck_error_time_series")
+    return last_fig or fig_all
 
 
 # ---------------------------------------------------------------------------
@@ -338,21 +358,41 @@ def plot_regime_panel(
     models: List[str],
     out_dir: str | Path,
 ) -> plt.Figure:
-    """Multi-panel figure: 3 diagnostic time series + regime shading.
+    """Three separate taller figures — one per diagnostic metric — plus a
+    combined panel saved for backward compatibility.
 
     diagnostics_df: columns = [time_idx, model, dobrushin, row_heterogeneity, row_entropy]
     regime_windows: list of (start_idx, end_idx, label)
     """
     _set_style()
-    fig, axes = plt.subplots(3, 1, figsize=(13, 9), sharex=True)
     metrics = [
-        ("dobrushin",         "Dobrushin δ(A_t)"),
-        ("row_heterogeneity", "Row Heterogeneity"),
-        ("row_entropy",       "Row Entropy H(A_t)"),
+        ("dobrushin",         "Dobrushin δ(A_t)",    "dobrushin_over_time"),
+        ("row_heterogeneity", "Row Heterogeneity",   "row_heterogeneity_over_time"),
+        ("row_entropy",       "Row Entropy H(A_t)",  "row_entropy_over_time"),
     ]
-
     colors = plt.cm.tab10.colors
-    for ax, (col, ylabel) in zip(axes, metrics):
+    last_fig = None
+
+    for col, ylabel, stem in metrics:
+        fig, ax = plt.subplots(figsize=(13, 5))   # taller standalone figure
+        if col in diagnostics_df.columns:
+            for i, model in enumerate(models):
+                sub = diagnostics_df[diagnostics_df["model"] == model]
+                label = model + (" (degenerate)" if "state_free" in model else "")
+                ax.plot(sub["time_idx"], sub[col], label=label,
+                        color=colors[i % len(colors)], alpha=0.8)
+            for (start, end, name) in regime_windows:
+                ax.axvspan(start, end, alpha=0.18, color="salmon", label=f"Regime: {name}")
+        ax.set_xlabel("Time index (full series)")
+        ax.set_ylabel(ylabel)
+        ax.legend(fontsize=8, loc="upper right")
+        fig.tight_layout()
+        save_fig(fig, Path(out_dir) / stem)
+        last_fig = fig
+
+    # Also keep a combined panel for backward compat
+    fig_all, axes_all = plt.subplots(3, 1, figsize=(13, 9), sharex=True)
+    for ax, (col, ylabel, _) in zip(axes_all, metrics):
         if col not in diagnostics_df.columns:
             ax.set_ylabel(ylabel)
             continue
@@ -365,12 +405,11 @@ def plot_regime_panel(
             ax.axvspan(start, end, alpha=0.18, color="salmon", label=f"Regime: {name}")
         ax.set_ylabel(ylabel)
         ax.legend(fontsize=8, loc="upper right")
-
-    axes[-1].set_xlabel("Time index (full series)")
-    axes[0].set_title("Operator Diagnostics over Time with Regime Windows", fontsize=13)
-    fig.tight_layout()
-    save_fig(fig, Path(out_dir) / "regime_diagnostic_panel")
-    return fig
+    axes_all[-1].set_xlabel("Time index (full series)")
+    axes_all[0].set_title("Operator Diagnostics over Time with Regime Windows", fontsize=13)
+    fig_all.tight_layout()
+    save_fig(fig_all, Path(out_dir) / "regime_diagnostic_panel")
+    return last_fig or fig_all
 
 
 # ---------------------------------------------------------------------------
