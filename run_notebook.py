@@ -1,14 +1,27 @@
-"""Execute Extended_Dataset_Figures.ipynb with project root as cwd."""
+"""Execute a notebook with project root as cwd.
+
+Usage:
+    python run_notebook.py [notebook_path]
+
+Default: Multiasset Notebooks/Extended_Dataset_Figures.ipynb
+"""
 import asyncio
 import os
+import sys
 from pathlib import Path
 
 import nbformat
 from nbclient import NotebookClient
 
 PROJECT_ROOT = Path(__file__).parent
-NB_PATH = PROJECT_ROOT / "Multiasset Notebooks" / "Extended_Dataset_Figures.ipynb"
-OUT_PATH = PROJECT_ROOT / "Multiasset Notebooks" / "Extended_Dataset_Figures_executed.ipynb"
+
+if len(sys.argv) > 1:
+    NB_PATH = PROJECT_ROOT / sys.argv[1]
+else:
+    NB_PATH = PROJECT_ROOT / "Multiasset Notebooks" / "Extended_Dataset_Figures.ipynb"
+
+stem = NB_PATH.stem
+OUT_PATH = NB_PATH.parent / f"{stem}_executed.ipynb"
 
 # Change to project root so relative paths work
 os.chdir(PROJECT_ROOT)
