@@ -374,7 +374,7 @@ def plot_regime_panel(
     last_fig = None
 
     for col, ylabel, stem in metrics:
-        fig, ax = plt.subplots(figsize=(13, 5))   # taller standalone figure
+        fig, ax = plt.subplots(figsize=(5, 8))   # portrait: extra tall for two-column layout
         if col in diagnostics_df.columns:
             for i, model in enumerate(models):
                 sub = diagnostics_df[diagnostics_df["model"] == model]
