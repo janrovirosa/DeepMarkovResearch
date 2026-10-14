@@ -1,25 +1,21 @@
-\documentclass{article}
-\usepackage{booktabs}
-\begin{document}
 \begin{table}[ht]
 \centering
-\caption{Best configuration per stock (C-EXT)}
+\caption{Best configuration per stock (SWA run)}
 \label{tab:best-config}
 \begin{tabular}{lrrrr}
 \toprule
 ticker & model & h & N & delta_marginal \\
 \midrule
-JPM & state_free & 1 & 55 & -0.0580 \\
+BAC & state_cond & 1 & 10 & -0.0156 \\
 C & state_cond & 5 & 20 & -0.0447 \\
-WFC & state_cond & 21 & 35 & -0.0293 \\
+FITB & state_cond & 1 & 55 & -0.0448 \\
 GS & state_free & 1 & 10 & -0.0019 \\
+JPM & state_free & 1 & 55 & -0.0580 \\
 MS & state_free & 1 & 10 & -0.0399 \\
+MTB & state_cond & 1 & 35 & -0.0726 \\
 PNC & state_cond & 1 & 35 & -0.0209 \\
 USB & state_cond & 1 & 4 & 0.0306 \\
-FITB & state_cond & 1 & 55 & -0.0448 \\
-MTB & state_cond & 1 & 35 & -0.0726 \\
-BAC & state_cond & 1 & 10 & -0.0156 \\
+WFC & state_cond & 21 & 35 & -0.0293 \\
 \bottomrule
 \end{tabular}
 \end{table}
-\end{document}
