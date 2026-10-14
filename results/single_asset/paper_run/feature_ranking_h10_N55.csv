@@ -1,0 +1,195 @@
+feature_index,feature,mi
+123,Return on Avg Tangible Equity,0.16979131801666636
+23,"Goodwill, MSRs and other intangible assets",0.16894937562968249
+84,Principal transactions,0.16886186235314327
+94,Total net revenue,0.16858212162349862
+145,Avg Loans/Deposits,0.1682854998318275
+16,Trading assets included assets pledged,0.1673387362784231
+177,Operating Income,0.16714855664138106
+185,Total Deposits,0.1642717368563904
+95,Provision for credit losses.y,0.16107516783179943
+143,Loans/Deposits (%),0.16050478610147412
+31,Accounts payable and other liabilities.x,0.16011561614666103
+122,Return on Average Equity,0.1587967926903655
+147,Avg Securities/Earning Assets,0.15831633958950597
+60,Proceeds from paydowns and maturities,0.15638682031877238
+76,Net decrease / increase in cash and due from banks,0.15432507253175576
+52,Accrued interest and accounts receivable.y,0.1533174006939637
+184,Total Assets,0.1530053317105251
+97,Compensation expense,0.15267916108313795
+62,Proceeds from sales,0.15240679718505312
+179,Net Int. Inc. after Loan Loss Provision,0.1522080000564765
+176,Loan Loss Provision,0.15190084808819648
+144,Invested Assets+Loans/Deposits,0.15176071628941568
+45,Depreciation and amortization,0.15107524710716902
+43,Adjustments to reconcile net income / loss to net cash provided by / used in operating activities,0.15106958980633145
+131,EPS (recurring),0.15040659289679859
+120,Return on Average Assets,0.14977733389063097
+29,Short-term borrowings,0.1495592195728035
+171,Average Assets - Total,0.1494244678946961
+30,Trading liabilities.x,0.14897721161706645
+54,Trading liabilities.y,0.1488109788858072
+57,Net cash used in / provided by investing activities,0.1483182492064099
+65,"Other changes in loans, net",0.14810982452266774
+26,Total liabilities,0.14783612268176505
+27,Deposits.x,0.14764771144912814
+191,Tangible Assets,0.14759018141046365
+39,Accumulated other comprehensive income / loss,0.14733835891874314
+137,Tangible Book Value per Share,0.14727752672077
+44,Provision for credit losses.x,0.14685909064808111
+126,Deposits/Branch,0.1464360765556112
+96,Total noninterest expense,0.1462385856518118
+164,Tangible Common Equity / Tangible Assets (%),0.14448650161109278
+104,Income tax expense / benefit,0.1442684440022628
+21,Accrued interest and accounts receivable.x,0.1442363490255829
+99,"Technology, communications and equipment expense",0.143850991206258
+121,Return on Risk-Weighted Assets,0.14326075235937186
+58,Federal funds sold and securities purchased under resale agreements.y,0.1430855837286762
+188,Total Shareholders' Equity,0.14307656670432412
+157,NPAs / Total Assets,0.14292656153320316
+189,Tangible Common Equity,0.14252884506595453
+33,Long-term debt,0.14176620736591605
+153,Loan Loss Reserves/Non-Performing Loans,0.14120376474742002
+139,Basic Shares Outstanding (M),0.14111612516689576
+109,Net income / loss applicable to common stockholders,0.14110424619306627
+124,Return on Average Common Equity,0.14030964422133163
+116,PPNR/Avg Assets,0.14027233940443207
+133,EPS (diluted),0.14018793885124659
+186,Core Deposits,0.13967505422389337
+156,Non-Performing Loans/Loan Loss Reserves,0.13935036320692795
+190,Tangible Equity,0.13867387418832955
+86,"Asset management, administration and commissions",0.13762028089341083
+67,Net cash provided by / used in financing activities,0.13743990957460106
+138,Diluted Shares Outstanding (M),0.13730029999047577
+141,Cash & Secs/Deposits (M),0.13685795153878022
+72,Payments of long-term borrowings,0.13661602888408897
+47,Other,0.1362840351682939
+34,Total stockholders' equity,0.1361836784657111
+170,Total Loans,0.13614470227987763
+25,Total liabilities and stockholders' equity,0.13589517403561135
+11,Total assets,0.13576269785575068
+154,Loan Loss Reserves/Non-Performing Assets,0.13557678476119417
+71,Proceeds from long-term borrowings,0.13554570008000955
+38,Retained earnings,0.1354522006558474
+19,Loans,0.13534012260985762
+193,IG_bond_rate,0.13531523198950524
+140,Total Shares Outstanding (M),0.13512160857404076
+183,Total Real Estate Loans,0.13502697437998012
+135,Dividend Payout Ratio (%),0.13489561448041965
+168,# of Branches,0.13485390621150728
+125,Return on Avg Tangible Common Equity,0.1344962699145098
+136,Book Value per Share,0.1340242485662504
+132,EPS (basic),0.13313511009788215
+59,Held-to-maturity securities,0.1330595507954646
+101,Marketing,0.1330043820567548
+49,"Proceeds from sales, securitizations and paydowns of loans held-for-sale",0.13207079637712837
+91,Net interest income,0.13175916232413432
+98,Occupancy expense,0.13099950697377327
+78,Cash and due from banks at the end of the period,0.1308911573370306
+83,Investment banking fees,0.13054655685186134
+68,Deposits.y,0.13044632529977385
+150,Loan Loss Reserves/Total Loans (x),0.13040654979726085
+12,Cash and due from banks,0.12996287096132608
+108,Net income applicable to common stock before dividends and undistributed earnings allocated to participating securities,0.12988088081034999
+14,Federal funds sold and securities purchased under resale agreements.x,0.12962193880578354
+88,Mortgage fees and related income,0.12943684627273644
+134,Dividends per Share,0.12934053295572667
+169,Change in Branches,0.12841693131429022
+159,Texas Ratio,0.12793332229090293
+13,Deposits with banks,0.1278301484656108
+48,Originations and purchases of loans held-for-sale,0.127724652233149
+178,Net Interest Income,0.12704575222922898
+24,Other assets included at fair value and assets pledged,0.126956235048846
+113,Yield on interest-earning assets,0.1266946435873164
+79,Cash interest paid,0.12614295654930885
+152,Loan Loss Provisions / Net Charge-Offs,0.1261325135983995
+46,Deferred tax expense / benefit,0.12602082651634738
+103,Income / loss before income tax expense / benefit,0.12589315352148756
+102,Other expense,0.12448542382772398
+22,Premises and equipment,0.12443410965888546
+55,Accounts payable and other liabilities.y,0.12442001284868454
+40,"Treasury stock, at cost",0.12365913060135814
+85,Lending- and deposit-related fees,0.12343061912747721
+148,Loan Loss Coverage (x),0.12317625531338994
+64,Proceeds from sales and securitizations of loans held-for-investment,0.12174320717901121
+37,Additional paid-in capital,0.12169014344257345
+87,Securities gains / losses,0.12160624600835579
+110,Basic,0.1213769406841001
+15,Securities borrowed.x,0.12136289916646614
+17,"Investment securities, net of allowance for credit losses",0.12098487561173688
+167,Assets under Administration,0.12061882032577742
+61,Available-for-sale securities,0.12025122465161431
+117,PPNR/Avg Tangible Common Equity,0.12022743522341717
+74,"All other financing activities, net",0.11996957823241061
+18,"Loans, net of allowance for loan losses",0.11988594982829515
+182,Cash & Due from Banks,0.11926896516370622
+80,"Cash income taxes paid / refunded, net",0.11905450783569993
+28,Federal funds purchased and securities loaned or sold under repurchase agreements.x,0.11900097217014594
+63,Purchases,0.11893013776308692
+50,Trading assets,0.1186762168723332
+165,Assets under Supervision,0.11858490256101817
+112,Net Interest Margin - FTE,0.11837983633205695
+32,Beneficial interests issued by consolidated variable interest entities,0.11827066826995392
+90,Other income,0.11817016707315009
+180,Pre-Provision Net Revenue,0.11812919576466907
+149,Loan Loss Provision/Total Loans (x),0.1170126530009945
+142,Invested Assets/Deposits,0.11681193780737065
+127,Price/Earnings,0.1167965970252487
+118,PPNR/Avg Tangible Equity,0.11679158617321139
+187,Total Debt,0.11676501352236812
+51,Securities borrowed.y,0.11644445452746144
+161,Tier 1 Risk Based Capital Ratio (%),0.116121030323594
+166,Assets under Management,0.11584797357167265
+158,NPAs / Total Equity,0.11582697242080187
+41,Net cash provided by / used in operating activities,0.11522655963842787
+181,Net Income,0.11475027546533578
+20,Allowance for loan losses,0.11458905100024541
+66,"All other investing activities, net",0.11371156765791479
+162,Leverage Ratio,0.1130425968555766
+92,Interest income,0.11237451849269942
+105,Income from continuing operations,0.1120992027127734
+53,Other assets,0.11202007136892433
+106,Income / loss before extraordinary gain,0.11168192742798144
+82,Noninterest revenue,0.11068427592829977
+42,Net income / loss.x,0.11036593625584601
+69,Federal funds purchased and securities loaned or sold under repurchase agreements.y,0.10989861037809412
+111,Diluted,0.10918806513543888
+107,Net income / loss.y,0.10815058111078812
+56,Other operating adjustments,0.10723615997079872
+172,Efficiency Ratio,0.10717713393117645
+89,Card income,0.10695363013523984
+100,Professional and outside services,0.10694562646450123
+146,Avg Loans/Earning Assets,0.10589629047659166
+174,Interest Income,0.10579331698670735
+130,Dividend Yield (%),0.10503460391037223
+129,Price/Tangible Book Value,0.10435193273587817
+73,Dividends paid,0.10414767858183183
+7,Open,0.10321048027892665
+81,FEDFUNDS,0.10154753035230968
+93,Interest expense,0.10134399448483311
+5,Total Return (Gross),0.10134133849522975
+6,Cumulative Return %,0.10131952115772247
+128,Price/Book Value,0.10069535732436652
+75,Effect of exchange rate changes on cash and due from banks,0.0968310799331018
+10,Cumulative Change %,0.09679033131039017
+119,PPNR/Avg Equity,0.09579641965816954
+9,Low,0.09552252611521972
+8,High,0.095430646426097
+115,Non Interest Income / Revenue,0.09384929240463169
+70,Commercial paper and other borrowed funds,0.09356633234500844
+192,HY_bond_rate,0.09262500500747706
+175,Total Interest Expense,0.09111515137772574
+173,Change.y,0.09060426399695398
+155,Non-Performing Loans/Total Loans,0.08888477517168258
+35,Preferred stock,0.08606592094193566
+151,Net Charge-Offs / Average Loans,0.0823604418555286
+160,Common Equity Tier 1 Capital Ratio (x),0.07584159313086847
+114,Cost of total deposits (%),0.07045185322822611
+163,Total Capital Adequacy Ratio (%),0.07006574716463998
+77,Cash and due from banks at the beginning of the period,0.062058014919518456
+36,Common stock,0.04124619195092727
+0,Percent_change_backward,0.03943967792528991
+3,% Change,0.038366455026913826
+4,% Return,0.03741693546119329
+2,Change.x,0.024927508020749833
+1,CVol,0.0
