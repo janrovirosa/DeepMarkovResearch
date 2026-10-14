@@ -42,9 +42,8 @@ pip install -r requirements.txt
 jupyter lab notebooks/single_asset
 ```
 
-The single-asset notebooks load the weights of the run behind paper 1 from `results/single_asset/paper_run/cache`
-and only train what is missing, so they finish in a few minutes on a CPU. The grid notebook trains 32 small
-models on first run (about a minute on a CPU).
+All six notebooks load saved weights or saved per-day results and only train what is missing, so together they
+run in about two minutes on a CPU. Delete a `cache` folder to retrain those models from scratch.
 
 The multi-asset experiments train about 5,500 models and need a GPU (CUDA, Apple MPS or DirectML):
 
@@ -53,8 +52,9 @@ python experiments/run_vol.py            # or: python experiments/run_vol.py JPM
 python experiments/run_multiasset.py     # or one step: A, B, C, D, E, F
 ```
 
-Their weights are not tracked (only the one model figure 12 needs is in `results/multi_asset/weights`). The full
-set is in the git history before the cleanup commit (`git checkout 2e06cca -- results_vol/_cache results_multiasset/_cache_ext`).
+Their weights are not tracked, only the one model figure 12 needs (`results/multi_asset/weights`). Everything they
+produce is in `results/`, so the notebooks don't need them. Weights put in `results/volatility/_cache` or
+`results/multi_asset/_cache` are loaded instead of retrained.
 
 ## Conventions
 
