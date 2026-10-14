@@ -7,3 +7,11 @@ __pycache__/
 # training caches written by the experiment scripts, the few weights the notebooks need are tracked
 results/multi_asset/_cache/
 results/volatility/_cache/
+
+# licensed market data, see the Data section of the README
+data/banks/
+data/banks_raw/
+data/jpm_raw/*
+!data/jpm_raw/10YR_TREASURY.csv
+!data/jpm_raw/3M_CP.csv
+data/jpm/*.csv

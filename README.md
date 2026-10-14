@@ -30,7 +30,7 @@ experiments/               GPU jobs that write results/multi_asset and results/v
   prepare_banks.py         builds data/banks from data/banks_raw
   run_multiasset.py        experiments A to F
   run_vol.py               volatility-state experiments
-data/                      jpm (single asset features, built by dataset.Rmd from jpm_raw), banks, banks_raw
+data/                      not included, see Data below
 results/                   tables, figures, per-day operator diagnostics and CK series, a few model weights
 archive/                   early exploration, see archive/README.md
 ```
@@ -42,8 +42,9 @@ pip install -r requirements.txt
 jupyter lab notebooks/single_asset
 ```
 
-All six notebooks load saved weights or saved per-day results and only train what is missing, so together they
-run in about two minutes on a CPU. Delete a `cache` folder to retrain those models from scratch.
+With the data in place, all six notebooks load saved weights or saved per-day results and only train what is
+missing, so together they run in about two minutes on a CPU. Delete a `cache` folder to retrain those models from
+scratch. `notebooks/multi_asset/volatility` only reads `results/` and runs without the data.
 
 The multi-asset experiments train about 5,500 models and need a GPU (CUDA, Apple MPS or DirectML):
 
@@ -55,6 +56,21 @@ python experiments/run_multiasset.py     # or one step: A, B, C, D, E, F
 Their weights are not tracked, only the one model figure 12 needs (`results/multi_asset/weights`). Everything they
 produce is in `results/`, so the notebooks don't need them. Weights put in `results/volatility/_cache` or
 `results/multi_asset/_cache` are loaded instead of retrained.
+
+## Data
+
+The market data is licensed, so only the public Fed series are in the repo. Everything it produced is in `results/`.
+
+- `data/jpm_raw`: Bloomberg exports for JPM (daily price history, balance sheet, cash flow, income statement,
+  ratios, key items) and FRED series (FEDFUNDS, DGS10, DCPN3M, and the ICE BofA yields BAMLH0A0HYM2EY and
+  BAMLC0A4CBBBEY). `data/jpm/dataset.Rmd` builds `data/jpm/train_diagnostic.csv`, which the single-asset
+  notebooks read.
+- `data/banks_raw`: a WRDS export for JPM, C, WFC, GS, MS, PNC, USB, FITB, MTB, BAC, SPY and XLF, 1962 to 2023, in
+  `deep_markov_expanded_universe.csv`. The columns used are the CRSP daily fields (permno, ticker, date, price,
+  daily_return, volume, shares_out, market_cap) and the FRED series DFF, T10Y2Y, BAA10Y, VIXCLS, DCOILWTICO and
+  USREC. In CRSP the ticker MS belongs to other companies before 2006, so Morgan Stanley comes from a separate
+  daily file for PERMNO 69032 (`MS_updated.csv`). `python experiments/prepare_banks.py` builds `data/banks`, which
+  the experiment scripts and `notebooks/multi_asset/figures` read.
 
 ## Conventions
 

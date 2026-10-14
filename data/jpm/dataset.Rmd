@@ -25,7 +25,7 @@ cal = bizdays::calendars()[["Brazil/ANBIMA"]]
 
 ```{r}
 # 57 features -> 31 features
-JPM_balance_sheet = read_csv("../raw_data/Original/BalanceSheetJPM.csv")
+JPM_balance_sheet = read_csv("../jpm_raw/Original/BalanceSheetJPM.csv")
 JPM_balance_sheet = na.omit(JPM_balance_sheet) 
 JPM_balance_sheet = JPM_balance_sheet %>% mutate(across(-1, as.character)) %>%  pivot_longer(
     cols = -1,
@@ -49,7 +49,7 @@ JPM_balance_sheet
 ```{r}
 # YTD
 # 73 features -> 41 features
-JPM_cash_flow = read_csv("../raw_data/Original/CashFlowJPM.csv") 
+JPM_cash_flow = read_csv("../jpm_raw/Original/CashFlowJPM.csv") 
 JPM_cash_flow = na.omit(JPM_cash_flow)
 
 JPM_cash_flow = JPM_cash_flow  %>% mutate(across(-1, as.character)) %>% pivot_longer(
@@ -90,7 +90,7 @@ JPM_cash_flow
 
 ```{r}
 # No features lost
-FED_funds = read_csv("../raw_data/Original/FEDFUNDS.csv") 
+FED_funds = read_csv("../jpm_raw/Original/FEDFUNDS.csv") 
 FED_funds = na.omit(FED_funds)
 
 FED_funds = FED_funds %>% 
@@ -105,7 +105,7 @@ FED_funds
 ```{r}
 # YTD
 # 53 features -> 31 features
-JPM_income = read_csv("../raw_data/Original/IncomeStatementJPM.csv") 
+JPM_income = read_csv("../jpm_raw/Original/IncomeStatementJPM.csv") 
 JPM_income = na.omit(JPM_income)
 
 JPM_income = JPM_income %>% mutate(across(-1, as.character)) %>% pivot_longer(
@@ -147,7 +147,7 @@ JPM_income
 ```
 ```{r}
 # 57 features -> 31 features
-JPM_balance_sheet = read_csv("../raw_data/Original/BalanceSheetJPM.csv")
+JPM_balance_sheet = read_csv("../jpm_raw/Original/BalanceSheetJPM.csv")
 JPM_balance_sheet = na.omit(JPM_balance_sheet) 
 JPM_balance_sheet = JPM_balance_sheet %>% mutate(across(-1, as.character)) %>%  pivot_longer(
     cols = -1,
@@ -169,7 +169,7 @@ JPM_balance_sheet
 ```
 
 ```{r}
-JPM_ratios = read_csv("../raw_data/Diagnostic/RatiosJPM.csv")
+JPM_ratios = read_csv("../jpm_raw/Diagnostic/RatiosJPM.csv")
 JPM_ratios = na.omit(JPM_ratios)
 JPM_ratios = JPM_ratios %>% mutate(across(-1, as.character)) %>%  pivot_longer(
     cols = -1,
@@ -189,7 +189,7 @@ JPM_ratios = JPM_ratios %>% mutate(across(-1, as.character)) %>%  pivot_longer(
   ))
 ```
 ```{r}
-JPM_key = read_csv("../raw_data/Diagnostic/KeyItemsJPM_Interpolated.csv")
+JPM_key = read_csv("../jpm_raw/Diagnostic/KeyItemsJPM_Interpolated.csv")
 JPM_key = na.omit(JPM_key)
 JPM_key = JPM_key %>% mutate(across(-1, as.character)) %>%  pivot_longer(
     cols = -1,
@@ -209,13 +209,13 @@ JPM_key = JPM_key %>% mutate(across(-1, as.character)) %>%  pivot_longer(
   ))
 ```
 ```{r}
-HYBond = read_csv("../raw_data/Original/HYBond_interpolated.csv")
+HYBond = read_csv("../jpm_raw/Original/HYBond_interpolated.csv")
 HYBond = na.omit(HYBond)
 HYBond = HYBond %>% rename(Date = observation_date, HY_bond_rate = BAMLH0A0HYM2EY)
 HYBond
 ```
 ```{r}
-IgBond = read_csv("../raw_data/Original/IgBond.csv")
+IgBond = read_csv("../jpm_raw/Original/IgBond.csv")
 IgBond = na.omit(IgBond)
 IgBond = IgBond %>% rename(Date = observation_date, IG_bond_rate = BAMLC0A4CBBBEY)
 IgBond
@@ -224,7 +224,7 @@ IgBond
 
 
 ```{r}
-JPM = read_csv("../raw_data/Original/PriceHistoryJPM.csv")
+JPM = read_csv("../jpm_raw/Original/PriceHistoryJPM.csv")
 # Fill in dates to identify quarters
 JPM = JPM %>% mutate(Date = offset(as.Date("2025-11-02"), -(0:(n()-1)), cal), Year_Quarter = paste0(year(Date), "-Q", quarter(Date)))
 JPM = na.omit(JPM %>% select(Date, Year_Quarter, everything())) # Remove rows with NA values (No value generation for now)
