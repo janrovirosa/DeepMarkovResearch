@@ -139,8 +139,9 @@ def fit(model, path, train_loader, val_loader, n, sigma, device, **kw):
     return model, hist
 
 
-def operators(model, F_, t_idx, n_states, n_out, device, state_free=False):
+def operators(model, F_, t_idx, n_states, n_out, device, state_free=False, history=None):
     # A[t, i, :] = P(next | X_t = i, F_t), one forward pass per t over all states
+    # history (T, k-1): older states for a k-step model, kept at their observed values
     model.eval()
     A = np.zeros((len(t_idx), n_states, n_out), dtype=np.float32)
     states = torch.arange(n_states, dtype=torch.long, device=device)
@@ -149,6 +150,23 @@ def operators(model, F_, t_idx, n_states, n_out, device, state_free=False):
             f = torch.tensor(F_[t], dtype=torch.float32).unsqueeze(0)
             if state_free:
                 A[pos] = F.softmax(model(f.to(device), states[:1]), dim=1).cpu().numpy()[0][None, :]
-            else:
-                A[pos] = F.softmax(model(f.expand(n_states, -1).to(device), states), dim=1).cpu().numpy()
+                continue
+            x = states
+            if history is not None:
+                older = torch.tensor(history[pos], dtype=torch.long, device=device).expand(n_states, -1)
+                x = torch.cat([states[:, None], older], dim=1)
+            A[pos] = F.softmax(model(f.expand(n_states, -1).to(device), x), dim=1).cpu().numpy()
     return A
+
+
+def pick_device():
+    # DirectML for AMD cards on Windows, else CUDA, Apple MPS or CPU
+    try:
+        import torch_directml
+        return torch_directml.device()
+    except ImportError:
+        if torch.cuda.is_available():
+            return torch.device("cuda")
+        if torch.backends.mps.is_available():
+            return torch.device("mps")
+        return torch.device("cpu")

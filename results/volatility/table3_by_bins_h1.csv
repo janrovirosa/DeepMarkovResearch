@@ -1,0 +1,7 @@
+model,35,45,55
+state_cond_macro,3.5394,3.7926,3.9938
+state_cond_return,3.5379,3.792,3.9942
+state_cond_vol_w10,3.5318,3.7843,3.9864
+state_cond_vol_w21,3.5285,3.7834,3.9847
+state_cond_vol_w5,3.5387,3.7928,3.9955
+state_free,3.541,3.7954,3.993

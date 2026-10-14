@@ -1,0 +1,7 @@
+model,nll_test,delta_marginal
+state_cond_vol_w21,3.9847,-0.0226
+state_cond_vol_w10,3.9864,-0.0209
+state_free,3.993,-0.0143
+state_cond_macro,3.9938,-0.0135
+state_cond_return,3.9942,-0.0131
+state_cond_vol_w5,3.9955,-0.0119
